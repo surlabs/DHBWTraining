@@ -23,6 +23,16 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
                 "cmd" => "start",
                 "default" => true,
             ],
+            [
+                "permission" => "write",
+                "cmd" => "participants",
+                "txt" => $this->txt("object_participants")
+            ],
+            [
+                "permission" => "write",
+                "cmd" => "settings",
+                "txt" => $this->txt("object_settings")
+            ]
         ];
     }
 
@@ -31,5 +41,23 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
         $this->setType(ilDHBWTrainingPlugin::PLUGIN_ID);
     }
 
+    public function getCustomProperties($a_prop): array
+    {
+        if (!isset($this->obj_id)) {
+            return [];
+        }
 
+        $props = parent::getCustomProperties($a_prop);
+
+        if (ilObjDHBWTrainingAccess::_isOffline($this->obj_id)) {
+            $props[] = array(
+                'alert' => true,
+                'newline' => true,
+                'property' => 'Status',
+                'value' => 'Offline'
+            );
+        }
+
+        return $props;
+    }
 }
