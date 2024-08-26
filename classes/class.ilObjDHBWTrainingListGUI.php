@@ -12,12 +12,18 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
 {
     public function getGuiClass(): string
     {
-        // TODO: Implement getGuiClass() method.
+        return ilObjDHBWTrainingGUI::class;
     }
 
     public function initCommands(): array
     {
-        // TODO: Implement initCommands() method.
+        return [
+            [
+                "permission" => "read",
+                "cmd" => "index",
+                "default" => true,
+            ],
+        ];
     }
 
     public function initType()

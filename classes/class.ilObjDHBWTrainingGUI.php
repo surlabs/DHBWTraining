@@ -14,12 +14,12 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
 {
     public function getAfterCreationCmd(): string
     {
-        // TODO: Implement getAfterCreationCmd() method.
+        return $this->getStandardCmd();
     }
 
     public function getStandardCmd(): string
     {
-        // TODO: Implement getStandardCmd() method.
+        return "index";
     }
 
     public function performCommand(string $cmd): void
