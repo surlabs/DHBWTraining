@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace platform;
 
-
 /**
  * Class DHBWTrainingConfig
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
@@ -41,10 +40,10 @@ class DHBWTrainingConfig
     /**
      * Set the plugin configuration value for a given key to a given value
      * @param string $key
-     * @param mixed $value
+     * @param $value
      * @return void
      */
-    public static function set(string $key, mixed $value): void
+    public static function set(string $key, $value): void
     {
         if (is_bool($value)) {
             $value = (int)$value;
@@ -62,7 +61,7 @@ class DHBWTrainingConfig
      * @return mixed
      * @throws DHBWTrainingException
      */
-    public static function get(string $key): mixed
+    public static function get(string $key)
     {
         return self::$config[$key] ?? self::getFromDB($key);
     }
@@ -73,7 +72,7 @@ class DHBWTrainingConfig
      * @return mixed
      * @throws DHBWTrainingException
      */
-    public static function getFromDB(string $key) :mixed
+    public static function getFromDB(string $key)
     {
         $config = (new DHBWTrainingDatabase)->select('xdht_config', array(
             'name' => $key
@@ -135,5 +134,19 @@ class DHBWTrainingConfig
 
         // In case there is nothing to update, return true to avoid error messages
         return true;
+    }
+
+    public static function generateSalt($data = null) {
+        // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+        $data = $data ?? random_bytes(16);
+        assert(strlen($data) == 16);
+
+        // Set version to 0100
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        // Set bits 6-7 to 10
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+        // Output the 36 character UUID.
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }

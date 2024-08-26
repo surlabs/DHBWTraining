@@ -1,0 +1,9 @@
+obj_xdht#:#Training
+xdht_new#:#New training
+xdht_add#:#Add training
+objs_xdht_duplicate#:#Copy training
+config_learning_progress#:#Learning progress
+config_learning_progress_info#:#Learning progress
+config_salt#:#Salt
+config_salt_info#:#Salt
+config_msg_success#:#Config saved successfully!
