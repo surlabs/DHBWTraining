@@ -2,8 +2,24 @@ obj_xdht#:#Training
 xdht_new#:#New training
 xdht_add#:#Add training
 objs_xdht_duplicate#:#Copy training
+objs_xdht#:#Trainings
+
 config_learning_progress#:#Learning progress
 config_learning_progress_info#:#Learning progress
 config_salt#:#Salt
 config_salt_info#:#Salt
 config_msg_success#:#Config saved successfully!
+
+object_start#:#Start
+object_participants#:#Participants
+object_settings#:#Settings
+object_export#:#Export
+
+object_start_training#:#Start training
+
+object_settings_basic#:#Basic settings
+object_settings_title#:#Title
+object_settings_description#:#Description
+object_settings_learning_progress#:#Learning progress
+object_settings_learning_progress_info#:#If this option is enabled, the learning progress will be enabled even if the learning progress is disabled in the global settings
+object_settings_msg_success#:#Settings saved successfully!

@@ -20,7 +20,7 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
         return [
             [
                 "permission" => "read",
-                "cmd" => "index",
+                "cmd" => "start",
                 "default" => true,
             ],
         ];

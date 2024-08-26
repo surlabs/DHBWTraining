@@ -17,6 +17,7 @@ class DHBWTrainingDatabase
 {
     const ALLOWED_TABLES = [
         'xdht_config',
+        'rep_robj_xdht_settings'
     ];
 
     private ilDBInterface $db;

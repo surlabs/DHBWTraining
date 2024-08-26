@@ -4,44 +4,54 @@ declare(strict_types=1);
  * License disclaimer
  */
 
+use objects\Training;
+use platform\DHBWTrainingException;
+
 /**
  * Class ilObjDHBWTraining
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
  */
 class ilObjDHBWTraining extends ilObjectPlugin
 {
+    private Training $training;
 
     /**
      * Creates a new object
      * @param bool $clone_mode
+     * @throws DHBWTrainingException
      */
     protected function doCreate(bool $clone_mode = false): void
     {
-        //TODO: Implement doCreate() method.
+        $this->training = new Training($this->getId());
+
+        $this->training->save();
     }
 
     /**
      * Read the object
+     * @throws DHBWTrainingException
      */
     protected function doRead(): void
     {
-        //TODO: Implement doRead() method.
+        $this->training = new Training($this->getId());
     }
 
     /**
      * Deletes the object
+     * @throws DHBWTrainingException
      */
     protected function doDelete(): void
     {
-        //TODO: Implement doDelete() method.
+        $this->training->delete();
     }
 
     /**
      * Updates the object
+     * @throws DHBWTrainingException
      */
     protected function doUpdate(): void
     {
-        //TODO: Implement doUpdate() method.
+        $this->training->save();
     }
 
     protected function initType(): void
@@ -49,4 +59,8 @@ class ilObjDHBWTraining extends ilObjectPlugin
         $this->setType(ilDHBWTrainingPlugin::PLUGIN_ID);
     }
 
+    public function getTraining(): Training
+    {
+        return $this->training;
+    }
 }

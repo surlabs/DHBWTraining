@@ -93,11 +93,6 @@ if (!$db->tableExists('rep_robj_xdht_settings')) {
 
 if (!$db->tableExists('rep_robj_xdht_partic')) {
     $fields = [
-        'id' => [
-            'type' => 'integer',
-            'length' => 8,
-            'notnull' => true
-        ],
         'training_obj_id' => [
             'type' => 'integer',
             'length' => 4,
@@ -143,9 +138,7 @@ if (!$db->tableExists('rep_robj_xdht_partic')) {
     ];
 
     $db->createTable('rep_robj_xdht_partic', $fields);
-    $db->addPrimaryKey('rep_robj_xdht_partic', ['id']);
-    $db->createSequence('rep_robj_xdht_partic');
-
+    $db->addPrimaryKey('rep_robj_xdht_partic', ['dhbw_training_object_id']);
 }
 
 $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 120]);
@@ -181,4 +174,21 @@ $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 120]);
 <#9>
 <?php
 //Previous Version
+?>
+<#10>
+<?php
+global $DIC;
+$db = $DIC->database();
+
+if ($db->tableExists('rep_robj_xdht_settings')) {
+    if ($db->sequenceExists('rep_robj_xdht_settings') ) {
+        $db->dropSequence('rep_robj_xdht_settings');
+    }
+
+    if ($db->tableColumnExists('rep_robj_xdht_settings', 'id')) {
+        $db->dropPrimaryKey('rep_robj_xdht_settings');
+        $db->dropTableColumn('rep_robj_xdht_settings', 'id');
+        $db->addPrimaryKey('rep_robj_xdht_settings', ['dhbw_training_object_id']);
+    }
+}
 ?>
