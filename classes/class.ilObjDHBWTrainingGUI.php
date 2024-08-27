@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
+use platform\DHBWTrainingException;
+use ui\DHBWParticipantsTable;
 
 /**
  * Class ilObjDHBWTrainingGUI
@@ -79,6 +81,19 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $start_button = $this->factory->button()->standard($this->plugin->txt("object_start_training"), $this->ctrl->getLinkTarget($this, "startTraining"));
 
         $DIC->toolbar()->addStickyItem($start_button);
+    }
+
+    /**
+     * @throws ilException
+     * @throws DHBWTrainingException
+     */
+    private function participants()
+    {
+        $this->tabs->activateTab("participants");
+
+        $participantsTable = new DHBWParticipantsTable($this, "participants", $this->object->getTraining());
+
+        $this->tpl->setContent($participantsTable->getHTML());
     }
 
     /**

@@ -17,7 +17,9 @@ class DHBWTrainingDatabase
 {
     const ALLOWED_TABLES = [
         'xdht_config',
-        'rep_robj_xdht_settings'
+        'rep_robj_xdht_settings',
+        'rep_robj_xdht_partic',
+        'usr_data'
     ];
 
     private ilDBInterface $db;
@@ -154,7 +156,7 @@ class DHBWTrainingDatabase
      * @return array
      * @throws DHBWTrainingException
      */
-    public function select(string $table, ?array $where = null, ?array $columns = null, ?string $extra = ""): array
+    public function select(string $table, ?array $where = null, ?array $columns = null, ?string $extra = "", ?array $join = null): array
     {
         if (!$this->validateTableName($table)) {
             throw new DHBWTrainingException("Invalid table name: " . $table);
@@ -163,8 +165,24 @@ class DHBWTrainingDatabase
         try {
             $query = "SELECT " . (isset($columns) ? implode(", ", $columns) : "*") . " FROM " . $table;
 
+            if (isset($join)) {
+                if (count($join) !== 4) {
+                    throw new DHBWTrainingException("Invalid join array");
+                }
+
+                if (!$this->validateTableName($join[1])) {
+                    throw new DHBWTrainingException("Invalid table name: " . $join[1]);
+                }
+
+                $query .= " " . $join[0] . " JOIN " . $join[1] . " ON " . $table . "." . $join[2] . " = " . $join[1] . "." . $join[3];
+            }
+
             if (isset($where)) {
                 $query .= " WHERE " . implode(" AND ", array_map(function ($key, $value) {
+                        if (strpos($value, '%') === 0 && strrpos($value, '%') === strlen($value) - 1) {
+                            return $key . " LIKE " . $value;
+                        }
+
                         return $key . " = " . $value;
                     }, array_keys($where), array_map(function ($value) {
                         return $this->db->quote($value);

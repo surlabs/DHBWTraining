@@ -34,3 +34,12 @@ object_settings_log#:#Log
 object_settings_learning_progress#:#Learning progress
 object_settings_learning_progress_info#:#If this option is enabled, the learning progress will be enabled even if the learning progress is disabled in the global settings
 object_settings_msg_success#:#Settings saved successfully!
+
+participants_table_name#:#Name
+participants_table_usr_name#:#Username
+participants_table_learning_progress#:#Learning progress
+participants_table_first_access#:#First access
+participants_table_last_access#:#Last access
+status_not_attempted#:#Not attempted
+status_in_progress#:#In progress
+status_completed#:#Completed
