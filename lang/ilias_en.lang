@@ -20,6 +20,17 @@ object_start_training#:#Start training
 object_settings_basic#:#Basic settings
 object_settings_title#:#Title
 object_settings_description#:#Description
+object_settings_online#:#Online
+object_settings_online_info#:#If online, participants can take the assisted exercise
+object_settings_recommender_system#:#Recommender system
+object_settings_installation_key#:#Installation key
+object_settings_secret#:#Secret
+object_settings_server#:#Server
+object_settings_external_server#:#External server
+object_settings_built_in_server#:#Built-in server
+object_settings_built_in_server_info#:#You need to set [[question_id]] in description of some questions.<br>In these questions, one is randomly selected for recomander_id.<br>See in Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 for adjust debug server
+object_settings_url#:#URL
+object_settings_log#:#Log
 object_settings_learning_progress#:#Learning progress
 object_settings_learning_progress_info#:#If this option is enabled, the learning progress will be enabled even if the learning progress is disabled in the global settings
 object_settings_msg_success#:#Settings saved successfully!

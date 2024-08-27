@@ -115,6 +115,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
     private function buildSettingsForm(): array
     {
         $inputs_basic = array();
+        $recommender_system = array();
 
         $inputs_basic[] = $this->factory->input()->field()->text(
             $this->plugin->txt('object_settings_title')
@@ -133,6 +134,15 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         ));
 
         $inputs_basic[] = $this->factory->input()->field()->checkbox(
+            $this->plugin->txt('object_settings_online'),
+            $this->plugin->txt('object_settings_online_info')
+        )->withValue($this->object->getTraining()->isOnline())->withAdditionalTransformation($this->refinery->custom()->transformation(
+            function ($v) {
+                $this->object->getTraining()->setOnline($v);
+            }
+        ));
+
+        $inputs_basic[] = $this->factory->input()->field()->checkbox(
             $this->plugin->txt('object_settings_learning_progress'),
             $this->plugin->txt('object_settings_learning_progress_info')
         )->withValue($this->object->getTraining()->isLearningProgress())->withAdditionalTransformation($this->refinery->custom()->transformation(
@@ -141,8 +151,66 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
             }
         ));
 
+        $recommender_system[] = $this->factory->input()->field()->text(
+            $this->plugin->txt('object_settings_installation_key')
+        )->withValue($this->object->getTraining()->getInstallationKey())->withAdditionalTransformation($this->refinery->custom()->transformation(
+            function ($v) {
+                $this->object->getTraining()->setInstallationKey($v);
+            }
+        ))->withRequired(true);
+
+        $recommender_system[] = $this->factory->input()->field()->text(
+            $this->plugin->txt('object_settings_secret')
+        )->withValue($this->object->getTraining()->getSecret())->withAdditionalTransformation($this->refinery->custom()->transformation(
+            function ($v) {
+                $this->object->getTraining()->setSecret($v);
+            }
+        ))->withRequired(true);
+
+        $external_server_group = $this->factory->input()->field()->group(array(
+            $this->factory->input()->field()->text(
+                $this->plugin->txt('object_settings_url')
+            )->withValue($this->object->getTraining()->getUrl())->withAdditionalTransformation($this->refinery->custom()->transformation(
+                function ($v) {
+                    $this->object->getTraining()->setUrl($v);
+                }
+            ))->withRequired(true)
+        ), $this->plugin->txt('object_settings_external_server'));
+
+        $built_in_server_group = $this->factory->input()->field()->group(array(
+
+        ), $this->plugin->txt('object_settings_built_in_server'), $this->plugin->txt('object_settings_built_in_server_info'));
+
+        $recomender_system_server = $this->factory->input()->field()->switchableGroup(array(
+            "external_server" => $external_server_group,
+            "built_in_server" => $built_in_server_group
+        ), $this->plugin->txt('object_settings_server'));
+
+        if ($this->object->getTraining()->isRecommenderSystemServer()) {
+            $recomender_system_server = $recomender_system_server->withValue("built_in_server");
+        } else {
+            $recomender_system_server = $recomender_system_server->withValue("external_server");
+        }
+
+        $recomender_system_server = $recomender_system_server->withAdditionalTransformation($this->refinery->custom()->transformation(
+            function ($v) {
+                $this->object->getTraining()->setRecommenderSystemServer($v[0] == "built_in_server");
+            }
+        ));
+
+        $recommender_system[] = $recomender_system_server;
+
+        $recommender_system[] = $this->factory->input()->field()->checkbox(
+            $this->plugin->txt('object_settings_log')
+        )->withValue($this->object->getTraining()->isLog())->withAdditionalTransformation($this->refinery->custom()->transformation(
+            function ($v) {
+                $this->object->getTraining()->setLog($v);
+            }
+        ));
+
         return array(
             $this->factory->input()->field()->section($inputs_basic, $this->plugin->txt("object_settings_basic"), ""),
+            $this->factory->input()->field()->section($recommender_system, $this->plugin->txt("object_settings_recommender_system"), ""),
         );
     }
 

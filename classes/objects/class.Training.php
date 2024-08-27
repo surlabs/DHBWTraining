@@ -23,8 +23,8 @@ class Training
     private string $url = "";
     private bool $log = false;
     private bool $recommender_system_server = false;
-    private string $rec_sys_ser_bui_in_deb_comp = "";
-    private string $rec_sys_ser_bui_in_deb_progm = "";
+    private array $rec_sys_ser_bui_in_deb_comp = [];
+    private array $rec_sys_ser_bui_in_deb_progm = [];
     private bool $learning_progress = false;
 
     /**
@@ -119,23 +119,31 @@ class Training
         $this->recommender_system_server = $recommender_system_server;
     }
 
-    public function getRecSysSerBuiInDebComp(): string
+    public function getRecSysSerBuiInDebComp(): array
     {
         return $this->rec_sys_ser_bui_in_deb_comp;
     }
 
-    public function setRecSysSerBuiInDebComp(string $rec_sys_ser_bui_in_deb_comp): void
+    public function setRecSysSerBuiInDebComp(?array $rec_sys_ser_bui_in_deb_comp = []): void
     {
+        if ($rec_sys_ser_bui_in_deb_comp === null) {
+            $rec_sys_ser_bui_in_deb_comp = [];
+        }
+
         $this->rec_sys_ser_bui_in_deb_comp = $rec_sys_ser_bui_in_deb_comp;
     }
 
-    public function getRecSysSerBuiInDebProgm(): string
+    public function getRecSysSerBuiInDebProgm(): array
     {
         return $this->rec_sys_ser_bui_in_deb_progm;
     }
 
-    public function setRecSysSerBuiInDebProgm(string $rec_sys_ser_bui_in_deb_progm): void
+    public function setRecSysSerBuiInDebProgm(?array $rec_sys_ser_bui_in_deb_progm = []): void
     {
+        if ($rec_sys_ser_bui_in_deb_progm === null) {
+            $rec_sys_ser_bui_in_deb_progm = [];
+        }
+
         $this->rec_sys_ser_bui_in_deb_progm = $rec_sys_ser_bui_in_deb_progm;
     }
 
@@ -166,8 +174,8 @@ class Training
             $this->setUrl($result[0]["url"]);
             $this->setLog((bool) $result[0]["log"]);
             $this->setRecommenderSystemServer((bool) $result[0]["recommender_system_server"]);
-            $this->setRecSysSerBuiInDebComp($result[0]["rec_sys_ser_bui_in_deb_comp"]);
-            $this->setRecSysSerBuiInDebProgm($result[0]["rec_sys_ser_bui_in_deb_progm"]);
+            $this->setRecSysSerBuiInDebComp(json_decode($result[0]["rec_sys_ser_bui_in_deb_comp"], true));
+            $this->setRecSysSerBuiInDebProgm(json_decode($result[0]["rec_sys_ser_bui_in_deb_progm"], true));
             $this->setLearningProgress((bool) $result[0]["learning_progress"]);
         }
     }
@@ -192,8 +200,8 @@ class Training
             "url" => $this->url,
             "log" => (int) $this->log,
             "recommender_system_server" => (int) $this->recommender_system_server,
-            "rec_sys_ser_bui_in_deb_comp" => $this->rec_sys_ser_bui_in_deb_comp,
-            "rec_sys_ser_bui_in_deb_progm" => $this->rec_sys_ser_bui_in_deb_progm,
+            "rec_sys_ser_bui_in_deb_comp" => json_encode($this->rec_sys_ser_bui_in_deb_comp),
+            "rec_sys_ser_bui_in_deb_progm" => json_encode($this->rec_sys_ser_bui_in_deb_progm),
             "learning_progress" => (int) $this->learning_progress
         ));
     }
