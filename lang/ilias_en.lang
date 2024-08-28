@@ -43,3 +43,9 @@ participants_table_last_access#:#Last access
 status_not_attempted#:#Not attempted
 status_in_progress#:#In progress
 status_completed#:#Completed
+
+object_export_generate#:#Create Export File (Create Test Export File)
+exports_table_file#:#File
+exports_table_size#:#Size
+exports_table_date#:#Date
+exports_table_actions#:#Actions

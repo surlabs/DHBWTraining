@@ -7,6 +7,7 @@ declare(strict_types=1);
 use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
 use platform\DHBWTrainingException;
+use ui\DHBWExportsTable;
 use ui\DHBWParticipantsTable;
 
 /**
@@ -91,9 +92,23 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
     {
         $this->tabs->activateTab("participants");
 
-        $participantsTable = new DHBWParticipantsTable($this, "participants", $this->object->getTraining());
+        $data_factory = new \ILIAS\Data\Factory();
 
-        $this->tpl->setContent($participantsTable->getHTML());
+        $table = $this->factory->table()->data(
+            '',
+            [
+                'name' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_name"))->withIsSortable(true),
+                'username' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_usr_name"))->withIsSortable(true),
+                'learning_progress' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_learning_progress"))->withIsSortable(true),
+                'first_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_first_access"), $data_factory->dateFormat()->standard())->withIsSortable(true),
+                'last_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_last_access"), $data_factory->dateFormat()->standard())->withIsSortable(true),
+            ],
+            new DHBWParticipantsTable()
+        );
+
+        $this->tpl->addCss($this->plugin->getDirectory() . "/templates/css/fix_table_width.css");
+
+        $this->tpl->setContent($this->renderer->render($table->withRequest($this->request)));
     }
 
     /**
@@ -238,5 +253,44 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $this->object->update();
 
         return $renderer->render($DIC->ui()->factory()->messageBox()->success($this->plugin->txt('object_settings_msg_success')));
+    }
+
+    private function export()
+    {
+        global $DIC;
+        $this->tabs->activateTab("export");
+
+        $generate_export = $this->factory->button()->standard($this->plugin->txt("object_export_generate"), $this->ctrl->getLinkTarget($this, "generateExport"));
+
+        $DIC->toolbar()->addStickyItem($generate_export);
+
+        $data_factory = new \ILIAS\Data\Factory();
+
+        $table = $this->factory->table()->data(
+            '',
+            [
+                'file' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_file"))->withIsSortable(true),
+                'size' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_size"))->withIsSortable(true),
+                'date' => $this->factory->table()->column()->date($this->plugin->txt("exports_table_date"), $data_factory->dateFormat()->standard())->withIsSortable(true),
+                'actions' => $this->factory->table()->column()->link($this->plugin->txt("exports_table_actions"))->withIsSortable(false)
+            ],
+            new DHBWExportsTable()
+        );
+
+        $this->tpl->addCss($this->plugin->getDirectory() . "/templates/css/fix_table_width.css");
+
+        $this->tpl->setContent($this->renderer->render($table->withRequest($this->request)));
+    }
+
+    private function generateExport()
+    {
+        dump("Generate export"); exit();
+    }
+
+    private function downloadExport()
+    {
+        $file = $this->request->getQueryParams()["file"];
+
+        dump("Download: $file"); exit();
     }
 }
