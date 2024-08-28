@@ -15,6 +15,7 @@ use ui\DHBWParticipantsTable;
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
  * @ilCtrl_isCalledBy ilObjDHBWTrainingGUI: ilRepositoryGUI, ilObjPluginDispatchGUI, ilAdministrationGUI
  * @ilCtrl_Calls      ilObjDHBWTrainingGUI: ilObjectCopyGUI, ilPermissionGUI, ilInfoScreenGUI, ilCommonActionDispatcherGUI
+ * @ilCtrl_Calls      ilObjDHBWTrainingGUI: DHBWMainGUI
  */
 class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
 {
@@ -42,8 +43,24 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         return "start";
     }
 
+    /**
+     * @throws ilCtrlException
+     */
+
     public function performCommand(string $cmd): void
     {
+        global $DIC;
+
+        $next_class = $DIC->ctrl()->getNextClass($this);
+
+        if (strtolower($next_class) == strtolower(DHBWMainGUI::class)) {
+            $this->tabs->activateTab("start");
+
+            $this->ctrl->forwardCommand(new DHBWMainGUI($this->object->getTraining()));
+
+            return;
+        }
+
         $this->{$cmd}();
     }
 
@@ -54,7 +71,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
 
     protected function setTabs(): void
     {
-        $this->tabs->addTab("start", $this->plugin->txt("object_start"), $this->ctrl->getLinkTarget($this, "start"));
+        $this->tabs->addTab("start", $this->plugin->txt("object_start"), $this->ctrl->getLinkTargetByClass(DHBWMainGUI::class, "index"));
 
         if ($this->checkPermissionBool("write")) {
             $this->tabs->addTab("participants", $this->plugin->txt("object_participants"), $this->ctrl->getLinkTarget($this, "participants"));
@@ -75,13 +92,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
      */
     private function start(): void
     {
-        global $DIC;
-
-        $this->tabs->activateTab("start");
-
-        $start_button = $this->factory->button()->standard($this->plugin->txt("object_start_training"), $this->ctrl->getLinkTarget($this, "startTraining"));
-
-        $DIC->toolbar()->addStickyItem($start_button);
+        $this->ctrl->redirectByClass(DHBWMainGUI::class);
     }
 
     /**
