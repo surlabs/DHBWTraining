@@ -8,6 +8,7 @@ namespace objects;
 
 use DateTime;
 use Exception;
+use ilLPStatus;
 use platform\DHBWTrainingDatabase;
 use platform\DHBWTrainingException;
 
@@ -20,18 +21,22 @@ class Participant
     private int $id;
     private int $training_obj_id;
     private int $usr_id;
-    private int $status;
+    private int $status = ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
     private DateTime $created;
     private DateTime $updated_status;
     private DateTime $last_access;
-    private int $created_usr_id;
-    private int $updated_usr_id;
+    private int $created_usr_id = 0;
+    private int $updated_usr_id = 0;
     private string $full_name;
     /**
      * @throws DHBWTrainingException
      */
     public function __construct(?int $id = null)
     {
+        $this->created = new DateTime();
+        $this->updated_status = new DateTime();
+        $this->last_access = new DateTime();
+
         if ($id !== null && $id > 0) {
             $this->id = $id;
 
@@ -150,7 +155,7 @@ class Participant
         $result = $database->select("rep_robj_xdht_partic", ["id" => $this->getId()]);
 
         if (isset($result[0])) {
-            $this->setTrainingObjId((int) $result[0]["dhbw_training_object_id"]);
+            $this->setTrainingObjId((int) $result[0]["training_obj_id"]);
             $this->setUsrId((int) $result[0]["usr_id"]);
             $this->setStatus((int) $result[0]["status"]);
             $this->setCreated(new DateTime($result[0]["created"]));
@@ -176,7 +181,7 @@ class Participant
 
         $database->insertOnDuplicatedKey("rep_robj_xdht_partic", array(
             "id" => $this->getId(),
-            "dhbw_training_object_id" => $this->getTrainingObjId(),
+            "training_obj_id" => $this->getTrainingObjId(),
             "usr_id" => $this->getUsrId(),
             "status" => $this->getStatus(),
             "created" => $this->getCreated()->format("Y-m-d H:i:s"),
@@ -196,5 +201,32 @@ class Participant
         $database = new DHBWTrainingDatabase();
 
         $database->delete("rep_robj_xdht_partic", ["id" => $this->getId()]);
+    }
+
+    /**
+     * @throws DHBWTrainingException
+     */
+    public static function findOrCreateParticipantByUsrAndTrainingObjectId(int $usr_id, int $training_id): Participant
+    {
+        $database = new DHBWTrainingDatabase();
+
+        $result = $database->select("rep_robj_xdht_partic", ["usr_id" => $usr_id, "training_obj_id" => $training_id]);
+
+        if (isset($result[0])) {
+            return new Participant((int) $result[0]["id"]);
+        }
+
+        global $ilUser;
+
+        $participant = new Participant();
+
+        $participant->setUsrId($usr_id);
+        $participant->setTrainingObjId($training_id);
+        $participant->setCreatedUsrId( $ilUser->getId());
+        $participant->setUpdatedUsrId( $ilUser->getId());
+        $participant->setFullName($ilUser->getFirstname() . " " . $ilUser->getLastName());
+
+
+        return $participant;
     }
 }

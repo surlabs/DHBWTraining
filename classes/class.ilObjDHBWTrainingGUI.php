@@ -95,10 +95,6 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $this->ctrl->redirectByClass(DHBWMainGUI::class);
     }
 
-    /**
-     * @throws ilException
-     * @throws DHBWTrainingException
-     */
     private function participants()
     {
         $this->tabs->activateTab("participants");
@@ -227,15 +223,15 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
             "built_in_server" => $built_in_server_group
         ), $this->plugin->txt('object_settings_server'));
 
-        if ($this->object->getTraining()->isRecommenderSystemServer()) {
-            $recomender_system_server = $recomender_system_server->withValue("built_in_server");
-        } else {
+        if ($this->object->getTraining()->getRecommenderSystemServer() == 1) {
             $recomender_system_server = $recomender_system_server->withValue("external_server");
+        } else {
+            $recomender_system_server = $recomender_system_server->withValue("built_in_server");
         }
 
         $recomender_system_server = $recomender_system_server->withAdditionalTransformation($this->refinery->custom()->transformation(
             function ($v) {
-                $this->object->getTraining()->setRecommenderSystemServer($v[0] == "built_in_server");
+                $this->object->getTraining()->setRecommenderSystemServer($v[0] == "external_server" ? 1 : 2);
             }
         ));
 
@@ -272,6 +268,8 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $this->tabs->activateTab("export");
 
         $generate_export = $this->factory->button()->standard($this->plugin->txt("object_export_generate"), $this->ctrl->getLinkTarget($this, "generateExport"));
+
+        $generate_export->getCanonicalName();
 
         $DIC->toolbar()->addStickyItem($generate_export);
 

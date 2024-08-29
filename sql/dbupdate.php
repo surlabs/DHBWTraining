@@ -93,6 +93,11 @@ if (!$db->tableExists('rep_robj_xdht_settings')) {
 
 if (!$db->tableExists('rep_robj_xdht_partic')) {
     $fields = [
+        'id' => [
+            'type' => 'integer',
+            'length' => 8,
+            'notnull' => true
+        ],
         'training_obj_id' => [
             'type' => 'integer',
             'length' => 4,
@@ -132,13 +137,13 @@ if (!$db->tableExists('rep_robj_xdht_partic')) {
         ],
         'full_name' => [
             'type' => 'text',
-            'length' => 8,
+            'length' => 255,
             'notnull' => false
         ]
     ];
 
     $db->createTable('rep_robj_xdht_partic', $fields);
-    $db->addPrimaryKey('rep_robj_xdht_partic', ['dhbw_training_object_id']);
+    $db->addPrimaryKey('rep_robj_xdht_partic', ['id']);
 }
 
 $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 120]);

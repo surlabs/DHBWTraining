@@ -28,7 +28,7 @@ object_settings_secret#:#Secret
 object_settings_server#:#Server
 object_settings_external_server#:#External server
 object_settings_built_in_server#:#Built-in server
-object_settings_built_in_server_info#:#You need to set [[question_id]] in description of some questions.<br>In these questions, one is randomly selected for recomander_id.<br>See in Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 for adjust debug server
+object_settings_built_in_server_info#:#You need to set [[question_id]] in description of some questions.<br>In these questions, one is randomly selected for recommender_id.<br>See in Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 for adjust debug server
 object_settings_url#:#URL
 object_settings_log#:#Log
 object_settings_learning_progress#:#Learning progress
@@ -49,3 +49,11 @@ exports_table_file#:#File
 exports_table_size#:#Size
 exports_table_date#:#Date
 exports_table_actions#:#Actions
+
+error_recommender_system_no_status#:#An error has occurred - No status
+error_no_question_id#:#An error occurred - Question was not found. Question ID: %s
+error_recommender_system#:#The recommender system has issued an error: %s
+error_recommender_system_not_reached#:#The recommender system could not be reached
+
+submit_answer#:#Submit answer
+interrupt#:#Interrupt

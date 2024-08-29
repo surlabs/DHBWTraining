@@ -22,7 +22,7 @@ class Training
     private string $secret = "";
     private string $url = "";
     private bool $log = false;
-    private bool $recommender_system_server = false;
+    private int $recommender_system_server = 1;
     private array $rec_sys_ser_bui_in_deb_comp = [];
     private array $rec_sys_ser_bui_in_deb_progm = [];
     private bool $learning_progress = false;
@@ -109,12 +109,12 @@ class Training
         $this->log = $log;
     }
 
-    public function isRecommenderSystemServer(): bool
+    public function getRecommenderSystemServer(): int
     {
         return $this->recommender_system_server;
     }
 
-    public function setRecommenderSystemServer(bool $recommender_system_server): void
+    public function setRecommenderSystemServer(int $recommender_system_server): void
     {
         $this->recommender_system_server = $recommender_system_server;
     }
@@ -173,7 +173,7 @@ class Training
             $this->setSecret($result[0]["secret"]);
             $this->setUrl($result[0]["url"]);
             $this->setLog((bool) $result[0]["log"]);
-            $this->setRecommenderSystemServer((bool) $result[0]["recommender_system_server"]);
+            $this->setRecommenderSystemServer((int) $result[0]["recommender_system_server"]);
             $this->setRecSysSerBuiInDebComp(json_decode($result[0]["rec_sys_ser_bui_in_deb_comp"], true));
             $this->setRecSysSerBuiInDebProgm(json_decode($result[0]["rec_sys_ser_bui_in_deb_progm"], true));
             $this->setLearningProgress((bool) $result[0]["learning_progress"]);
@@ -199,7 +199,7 @@ class Training
             "secret" => $this->secret,
             "url" => $this->url,
             "log" => (int) $this->log,
-            "recommender_system_server" => (int) $this->recommender_system_server,
+            "recommender_system_server" => $this->recommender_system_server,
             "rec_sys_ser_bui_in_deb_comp" => json_encode($this->rec_sys_ser_bui_in_deb_comp),
             "rec_sys_ser_bui_in_deb_progm" => json_encode($this->rec_sys_ser_bui_in_deb_progm),
             "learning_progress" => (int) $this->learning_progress
