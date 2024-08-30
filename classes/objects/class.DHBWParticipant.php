@@ -13,10 +13,10 @@ use platform\DHBWTrainingDatabase;
 use platform\DHBWTrainingException;
 
 /**
- * Class Participant
+ * Class DHBWParticipant
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
  */
-class Participant
+class DHBWParticipant
 {
     private int $id;
     private int $training_obj_id;
@@ -206,19 +206,19 @@ class Participant
     /**
      * @throws DHBWTrainingException
      */
-    public static function findOrCreateParticipantByUsrAndTrainingObjectId(int $usr_id, int $training_id): Participant
+    public static function findOrCreateParticipantByUsrAndTrainingObjectId(int $usr_id, int $training_id): DHBWParticipant
     {
         $database = new DHBWTrainingDatabase();
 
         $result = $database->select("rep_robj_xdht_partic", ["usr_id" => $usr_id, "training_obj_id" => $training_id]);
 
         if (isset($result[0])) {
-            return new Participant((int) $result[0]["id"]);
+            return new DHBWParticipant((int) $result[0]["id"]);
         }
 
         global $ilUser;
 
-        $participant = new Participant();
+        $participant = new DHBWParticipant();
 
         $participant->setUsrId($usr_id);
         $participant->setTrainingObjId($training_id);

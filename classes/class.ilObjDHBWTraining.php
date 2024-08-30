@@ -4,7 +4,7 @@ declare(strict_types=1);
  * License disclaimer
  */
 
-use objects\Training;
+use objects\DHBWTraining;
 use platform\DHBWTrainingException;
 
 /**
@@ -13,7 +13,7 @@ use platform\DHBWTrainingException;
  */
 class ilObjDHBWTraining extends ilObjectPlugin
 {
-    private Training $training;
+    private DHBWTraining $training;
 
     /**
      * Creates a new object
@@ -22,7 +22,7 @@ class ilObjDHBWTraining extends ilObjectPlugin
      */
     protected function doCreate(bool $clone_mode = false): void
     {
-        $this->training = new Training($this->getId());
+        $this->training = new DHBWTraining($this->getId());
 
         $this->training->save();
     }
@@ -33,7 +33,7 @@ class ilObjDHBWTraining extends ilObjectPlugin
      */
     protected function doRead(): void
     {
-        $this->training = new Training($this->getId());
+        $this->training = new DHBWTraining($this->getId());
     }
 
     /**
@@ -59,7 +59,7 @@ class ilObjDHBWTraining extends ilObjectPlugin
         $this->setType(ilDHBWTrainingPlugin::PLUGIN_ID);
     }
 
-    public function getTraining(): Training
+    public function getTraining(): DHBWTraining
     {
         return $this->training;
     }

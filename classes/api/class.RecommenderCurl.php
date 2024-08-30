@@ -4,13 +4,15 @@ declare(strict_types=1);
  * License disclaimer
  */
 
-namespace objects;
+namespace api;
 
 use Exception;
 use ilCurlConnection;
 use ilCurlConnectionException;
 use ilDHBWTrainingPlugin;
 use ilSession;
+use objects\DHBWProgressMeter;
+use objects\DHBWTraining;
 use platform\DHBWTrainingConfig;
 use platform\DHBWTrainingException;
 
@@ -24,23 +26,23 @@ class RecommenderCurl
     const KEY_RESPONSE_PROGRESS_METER = "xdht_response_progress_meter";
     const KEY_RESPONSE_PROGRESS_BAR = "xdht_response_progress_bar";
 
-    private Training $training;
+    private DHBWTraining $training;
     private RecommenderResponse $response;
     private ilDHBWTrainingPlugin $plugin;
 
-    public function __construct(Training $training, RecommenderResponse $response)
+    public function __construct(DHBWTraining $training, RecommenderResponse $response)
     {
         $this->training = $training;
         $this->response = $response;
         $this->plugin = ilDHBWTrainingPlugin::getInstance();
     }
 
-    public function getTraining(): Training
+    public function getTraining(): DHBWTraining
     {
         return $this->training;
     }
 
-    public function setTraining(Training $training): void
+    public function setTraining(DHBWTraining $training): void
     {
         $this->training = $training;
     }

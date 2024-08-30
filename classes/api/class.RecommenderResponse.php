@@ -4,10 +4,11 @@ declare(strict_types=1);
  * License disclaimer
  */
 
-namespace objects;
+namespace api;
 
 use ilGlobalTemplateInterface;
 use ilProgressBar;
+use objects\DHBWProgressMeter;
 
 /**
  * Class RecommenderResponse

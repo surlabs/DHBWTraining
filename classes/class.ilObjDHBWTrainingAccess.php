@@ -4,7 +4,7 @@ declare(strict_types=1);
  * License disclaimer
  */
 
-use objects\Training;
+use objects\DHBWTraining;
 use platform\DHBWTrainingException;
 
 /**
@@ -36,7 +36,7 @@ class ilObjDHBWTrainingAccess extends ilObjectPluginAccess
      */
     public static function _isOffline($a_obj_id): bool
     {
-        $training = new Training((int) $a_obj_id);
+        $training = new DHBWTraining((int) $a_obj_id);
         return !$training->isOnline();
     }
 }

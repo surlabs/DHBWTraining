@@ -10,10 +10,10 @@ use platform\DHBWTrainingDatabase;
 use platform\DHBWTrainingException;
 
 /**
- * Class Training
+ * Class DHBWTraining
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
  */
-class Training
+class DHBWTraining
 {
     private int $id;
     private int $question_pool_id = 0;
@@ -186,7 +186,7 @@ class Training
     public function save(): void
     {
         if (!isset($this->id) || $this->id == 0) {
-            throw new DHBWTrainingException("Training::save() - Training ID is 0");
+            throw new DHBWTrainingException("DHBWTraining::save() - DHBWTraining ID is 0");
         }
 
         $database = new DHBWTrainingDatabase();

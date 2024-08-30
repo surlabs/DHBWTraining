@@ -4,11 +4,11 @@ declare(strict_types=1);
  * License disclaimer
  */
 
+use api\RecommenderCurl;
+use api\RecommenderResponse;
 use ILIAS\UI\Factory;
-use objects\Participant;
-use objects\RecommenderCurl;
-use objects\RecommenderResponse;
-use objects\Training;
+use objects\DHBWParticipant;
+use objects\DHBWTraining;
 use platform\DHBWTrainingException;
 
 /**
@@ -22,11 +22,11 @@ class DHBWMainGUI
     private Factory $factory;
     private ilCtrl $ctrl;
     private ilDHBWTrainingPlugin $plugin;
-    private Training $training;
+    private DHBWTraining $training;
     private RecommenderResponse $response;
 
 
-    public function __construct(Training $training)
+    public function __construct(DHBWTraining $training)
     {
         global $DIC;
 
@@ -36,6 +36,8 @@ class DHBWMainGUI
 
         $this->training = $training;
         $this->response = new RecommenderResponse();
+
+        $DIC->ui()->mainTemplate()->addCss("./Services/COPage/css/content.css");
     }
 
     public function performCommand(string $cmd): void
@@ -91,7 +93,7 @@ class DHBWMainGUI
         $output = "";
 
         if ($this->training->isLearningProgress() && $this->response->getLearningProgressStatus() !== null) {
-            $participant = Participant::findOrCreateParticipantByUsrAndTrainingObjectId($ilUser->getId(), $this->training->getId());
+            $participant = DHBWParticipant::findOrCreateParticipantByUsrAndTrainingObjectId($ilUser->getId(), $this->training->getId());
 
             $participant->setStatus($this->response->getLearningProgressStatus());
             $participant->setLastAccess(new DateTime());
@@ -189,14 +191,6 @@ class DHBWMainGUI
         $previewSession = new ilAssQuestionPreviewSession($ilUser->getId(), $question['question_id']);
         $q_gui->setPreviewSession($previewSession);
 
-//        /**
-//         * shuffle like before
-//         */
-//        $shuffler = new ilArrayElementShuffler();
-//        $shuffler->setSeed($q_gui->object->getId() + $ilUser->getId());
-//        $q_gui->object->setShuffle(1);
-//        $q_gui->object->setShuffler($shuffler);
-
         $tpl->setCurrentBlock('question');
         $tpl->setVariable('TITLE', $q_gui->object->getTitle());
         $tpl->setVariable('QUESTION', $q_gui->getPreview());
@@ -218,6 +212,7 @@ class DHBWMainGUI
         $tpl->setVariable('QUESTION_ID', $question['question_id']);
         $tpl->setVariable('RECOMANDER_ID', $question['recomander_id']);
         $previewSession->setParticipantsSolution(null);
+
         return $tpl->get();
     }
 
@@ -246,14 +241,6 @@ class DHBWMainGUI
         $previewSession->init();
         $q_gui->setPreviewSession($previewSession);
 
-//        /**
-//         * Shuffle!
-//         */
-//        $shuffler = new ilArrayElementShuffler();
-//        $shuffler->setSeed($q_gui->object->getId() + $ilUser->getId());
-//        $q_gui->object->setShuffle(1);
-//        $q_gui->object->setShuffler($shuffler);
-
         $q_gui->setPreviousSolutionPrefilled(true);
         $tpl->setCurrentBlock('question');
         $tpl->setVariable('TITLE', $q_gui->object->getTitle());
@@ -272,6 +259,7 @@ class DHBWMainGUI
 
     /**
      * @throws ilCtrlException
+     * @throws ilTemplateException
      */
     protected function initSeparatorForm() : string
     {
@@ -286,5 +274,92 @@ class DHBWMainGUI
         $tpl->setVariable('RECOMANDER_ID', $this->response->getRecomander());
 
         return $tpl->get();
+    }
+
+    /**
+     * @throws DHBWTrainingException
+     * @throws ilTemplateException
+     * @throws ilCtrlException
+     * @throws ilSystemStyleException
+     */
+    public function answer()
+    {
+        global $DIC;
+
+        if ($_POST['submitted'] == 'cancel') {
+            $DIC->ctrl()->redirect($this, "index");
+        } else {
+            $question = RecommenderResponse::getQuestionByRecomander($_POST['recomander_id']);
+
+            $question_answers = new QuestionAnswers($question['type_tag'], $question['question_id']);
+            $answertext = array();
+            if (!$this->setAnsweredForPreviewSession($question)) {
+                $question = $this->facade->xdhtQuestionFactory()->getQuestionByRecomanderId(strval(filter_input(INPUT_POST, 'recomander_id')));
+                self::output()->output($this->initQuestionForm($question), true);
+
+                return;
+            }
+
+            switch ($question['type_tag']) {
+                case 'assSingleChoice':
+                    /**
+                     * @var QuestionAnswer $question_answer
+                     */
+                    $question_answer = $question_answers->getAnswers()[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
+                    if (is_object($question_answer)) {
+                        $answertext = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
+                    } else {
+                        $answertext = ["answertext" => "", "points" => 0];
+                    }
+                    break;
+                case 'assMultipleChoice':
+                    foreach ($_POST as $key => $value) {
+                        if (strpos($key, 'multiple_choice_result') !== false) {
+                            $question_answer = $question_answers->getAnswers()[$value];
+                            if (is_object($question_answer)) {
+                                $answertext[] = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
+                            } else {
+                                $answertext = ["answertext" => "", "points" => 0];
+                            }
+                        }
+                    }
+                    break;
+                case 'assClozeTest':
+                    foreach ($_POST as $key => $value) {
+
+                        if (strpos($key, 'gap_') !== false) {
+                            $value = str_replace(array(' ', ','), array('', '.'), $value);
+                            $arr_splitted_gap = explode('gap_', $key);
+                            $question_answer = $question_answers->getAnswers();
+                            if (in_array($question_answer[$arr_splitted_gap[1]]['cloze_type'], [xdhtQuestionFactory::CLOZE_TYPE_TEXT, xdhtQuestionFactory::CLOZE_TYPE_NUMERIC])) {
+                                $answertext[] = ["gap_id" => $arr_splitted_gap[1], 'cloze_type' => 2, 'answertext' => base64_encode($value),
+                                    'points' => ($question_answer[$arr_splitted_gap[1]][0]->getAnswertext() == $value) * $question_answer[$arr_splitted_gap[1]][0]->getPoints()];
+                            } else {
+                                if (is_object($question_answer[$arr_splitted_gap[1]][$value])) {
+                                    $answertext[] = [
+                                        "gap_id"     => $arr_splitted_gap[1],
+                                        'cloze_type' => $question_answer[$arr_splitted_gap[1]]['cloze_type'],
+                                        'answertext' => base64_encode($question_answer[$arr_splitted_gap[1]][$value]->getAnswertext()),
+                                        'points' => $question_answer[$arr_splitted_gap[1]][$value]->getPoints()
+                                    ];
+                                } else {
+                                    $answertext[] = [
+                                        "gap_id"     => $arr_splitted_gap[1],
+                                        'cloze_type' => $question_answer[$arr_splitted_gap[1]]['cloze_type'],
+                                        'answertext' => "",
+                                        'points' => 0
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            $recommender = new RecommenderCurl($this->facade, $this->response);
+            $recommender->answer($_POST['recomander_id'], $question['question_type_fi'], $question['points'], $question['skills'], $answertext);
+
+            $this->proceedWithReturnOfRecommender();
+        }
     }
 }
