@@ -317,14 +317,14 @@ class RecommenderResponse
                 $ui_element = $progress_meter_factory->mini(
                     $progress_meter->getMaxReachableScore(),
                     (int) $progress_meter->getPrimaryReachedScore(),
-                    $progress_meter->getRequiredScore()
+                    (int) $progress_meter->getRequiredScore()
                 );
                 break;
             default:
                 $ui_element = $progress_meter_factory->standard(
                     $progress_meter->getMaxReachableScore(),
                     (int) $progress_meter->getPrimaryReachedScore(),
-                    $progress_meter->getRequiredScore(),
+                    (int) $progress_meter->getRequiredScore(),
                     (int) $progress_meter->getSecondaryReachedScore()
                 );
                 $ui_element->withMainText($progress_meter->getPrimaryReachedScoreLabel());
@@ -462,7 +462,7 @@ class RecommenderResponse
         return "<strong><em>Ihre Antwort ist nicht korrekt.<br>Lösung:</em></strong><br>$correct_answer";
     }
 
-    public static function getQuestionByRecomander(string $recomander_id): array
+    public static function getQuestionByRecomander(string $recomander_id): ?array
     {
         global $ilDB;
         $sql = "SELECT * FROM qpl_questions
@@ -471,6 +471,10 @@ inner join qpl_qst_type on qpl_qst_type.question_type_id = qpl_questions.questio
         $set = $ilDB->query($sql);
 
         $row = $ilDB->fetchAssoc($set);
+
+        if (!$row) {
+            return null;
+        }
 
         $row['recomander_id'] = $recomander_id;
         $row['skills'] = array();

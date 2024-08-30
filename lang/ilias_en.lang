@@ -54,6 +54,12 @@ error_recommender_system_no_status#:#An error has occurred - No status
 error_no_question_id#:#An error occurred - Question was not found. Question ID: %s
 error_recommender_system#:#The recommender system has issued an error: %s
 error_recommender_system_not_reached#:#The recommender system could not be reached
+error_no_question_found#:#No question found, try again
 
 submit_answer#:#Submit answer
 interrupt#:#Interrupt
+how_difficulty#:#How did you find this task?
+level1#:#Very Easy
+level2#:#Rather Easy
+level3#:#Rather Hard
+level4#:#Too Difficult

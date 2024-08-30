@@ -18,7 +18,7 @@ class DHBWProgressMeter {
     private int $max_width_in_pixel;
     private int $max_reachable_score;
 
-    private int $required_score;
+    private float $required_score;
 
     private ?string $required_score_label = null;
 
@@ -52,7 +52,7 @@ class DHBWProgressMeter {
         string $title,
         int $max_width_in_pixel,
         int $max_reachable_score,
-        int $required_score,
+        float $required_score,
         string $required_score_label,
         int $primary_reached_score,
         string $primary_reached_score_label,
@@ -133,12 +133,12 @@ class DHBWProgressMeter {
         $this->max_reachable_score = $max_reachable_score;
     }
 
-    public function getRequiredScore(): int
+    public function getRequiredScore(): float
     {
         return $this->required_score;
     }
 
-    public function setRequiredScore(int $required_score): void
+    public function setRequiredScore(float $required_score): void
     {
         $this->required_score = $required_score;
     }

@@ -7,7 +7,10 @@ declare(strict_types=1);
 use api\RecommenderCurl;
 use api\RecommenderResponse;
 use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
 use objects\DHBWParticipant;
+use objects\DHBWQuestionAnswer;
+use objects\DHBWQuestionAnswers;
 use objects\DHBWTraining;
 use platform\DHBWTrainingException;
 
@@ -20,6 +23,7 @@ use platform\DHBWTrainingException;
 class DHBWMainGUI
 {
     private Factory $factory;
+    private Renderer $renderer;
     private ilCtrl $ctrl;
     private ilDHBWTrainingPlugin $plugin;
     private DHBWTraining $training;
@@ -31,6 +35,7 @@ class DHBWMainGUI
         global $DIC;
 
         $this->factory = $DIC->ui()->factory();
+        $this->renderer = $DIC->ui()->renderer();
         $this->ctrl = $DIC->ctrl();
         $this->plugin = ilDHBWTrainingPlugin::getInstance();
 
@@ -133,7 +138,12 @@ class DHBWMainGUI
 
                 if ($this->response->getAnswerResponse() != "") {
                     $question = RecommenderResponse::getQuestionByRecomander($_POST['recomander_id']);
-                    $output = $this->initAnsweredQuestionForm($question);
+
+                    if (isset($question)) {
+                        $output = $this->initAnsweredQuestionForm($question);
+                    } else {
+                        $output = $this->renderer->render($this->factory->messageBox()->failure($this->plugin->txt("error_no_question_found")));
+                    }
 
                     break;
                 }
@@ -141,7 +151,13 @@ class DHBWMainGUI
                 switch ($this->response->getResponseType()) {
                     case RecommenderResponse::RESPONSE_TYPE_NEXT_QUESTION:
                         $question = RecommenderResponse::getQuestionByRecomander($this->response->getRecomander());
-                        $output = $this->initQuestionForm($question);
+
+                        if (isset($question)) {
+                            $output = $this->initQuestionForm($question);
+                        } else {
+                            $output = $this->renderer->render($this->factory->messageBox()->failure($this->plugin->txt("error_no_question_found")));
+                        }
+
                         break;
                     case RecommenderResponse::RESPONSE_TYPE_TEST_IS_FINISHED:
                         $this->response->sendMessages();
@@ -197,7 +213,7 @@ class DHBWMainGUI
 
         $tpl->parseCurrentBlock();
 
-        $tpl->setVariable('DIFFICULTY', $this->plugin->txt('difficulty'));
+        $tpl->setVariable('DIFFICULTY', $this->plugin->txt('how_difficulty'));
         $tpl->setVariable('CANCEL_BTN_VALUE', 'cancel');
         $tpl->setVariable('CANCEL_BTN_TEXT', $this->plugin->txt('interrupt'));
         $tpl->setVariable('BTN_QST_LEVEL1_VALUE', '1');
@@ -291,21 +307,21 @@ class DHBWMainGUI
         } else {
             $question = RecommenderResponse::getQuestionByRecomander($_POST['recomander_id']);
 
-            $question_answers = new QuestionAnswers($question['type_tag'], $question['question_id']);
+            $question_answers = DHBWQuestionAnswer::loadAnswersByQuestionTypeAndQuestionId($question['type_tag'], (int) $question['question_id']);
+
             $answertext = array();
             if (!$this->setAnsweredForPreviewSession($question)) {
-                $question = $this->facade->xdhtQuestionFactory()->getQuestionByRecomanderId(strval(filter_input(INPUT_POST, 'recomander_id')));
-                self::output()->output($this->initQuestionForm($question), true);
+                $question = RecommenderResponse::getQuestionByRecomander(strval(filter_input(INPUT_POST, 'recomander_id')));
+
+                $DIC->ui->mainTemplate()->setContent($this->initQuestionForm($question));
 
                 return;
             }
 
             switch ($question['type_tag']) {
                 case 'assSingleChoice':
-                    /**
-                     * @var QuestionAnswer $question_answer
-                     */
-                    $question_answer = $question_answers->getAnswers()[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
+                    $question_answer = $question_answers[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
+
                     if (is_object($question_answer)) {
                         $answertext = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
                     } else {
@@ -315,7 +331,8 @@ class DHBWMainGUI
                 case 'assMultipleChoice':
                     foreach ($_POST as $key => $value) {
                         if (strpos($key, 'multiple_choice_result') !== false) {
-                            $question_answer = $question_answers->getAnswers()[$value];
+                            $question_answer = $question_answers[$value];
+
                             if (is_object($question_answer)) {
                                 $answertext[] = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
                             } else {
@@ -328,10 +345,12 @@ class DHBWMainGUI
                     foreach ($_POST as $key => $value) {
 
                         if (strpos($key, 'gap_') !== false) {
+                            $question_answer = $question_answers;
+
                             $value = str_replace(array(' ', ','), array('', '.'), $value);
                             $arr_splitted_gap = explode('gap_', $key);
-                            $question_answer = $question_answers->getAnswers();
-                            if (in_array($question_answer[$arr_splitted_gap[1]]['cloze_type'], [xdhtQuestionFactory::CLOZE_TYPE_TEXT, xdhtQuestionFactory::CLOZE_TYPE_NUMERIC])) {
+
+                            if (in_array($question_answer[$arr_splitted_gap[1]]['cloze_type'], [0, 2])) {
                                 $answertext[] = ["gap_id" => $arr_splitted_gap[1], 'cloze_type' => 2, 'answertext' => base64_encode($value),
                                     'points' => ($question_answer[$arr_splitted_gap[1]][0]->getAnswertext() == $value) * $question_answer[$arr_splitted_gap[1]][0]->getPoints()];
                             } else {
@@ -356,9 +375,50 @@ class DHBWMainGUI
                     break;
             }
 
-            $recommender = new RecommenderCurl($this->facade, $this->response);
-            $recommender->answer($_POST['recomander_id'], $question['question_type_fi'], $question['points'], $question['skills'], $answertext);
+            $recommender = new RecommenderCurl($this->training, $this->response);
 
+            $recommender->answer($_POST['recomander_id'], (int) $question['question_type_fi'], (int) $question['points'], $question['skills'], $answertext);
+
+            $this->proceedWithReturnOfRecommender();
+        }
+    }
+
+    private function setAnsweredForPreviewSession(array $question)
+    {
+        global $ilUser;
+
+        $previewSession = new ilAssQuestionPreviewSession($ilUser->getId(), (int) $question['question_id']);
+
+        $q_gui = assQuestionGUI::_getQuestionGUI("", (int) $question['question_id']);
+
+        if(is_object($q_gui )) {
+            assQuestion::_includeClass($q_gui->getQuestionType(), 1);
+
+            $question_type_gui = $q_gui->getQuestionType() . 'GUI';
+
+            $ass_question = new $question_type_gui($question['question_id']);
+
+            return $ass_question->object->persistPreviewState($previewSession);
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws ilCtrlException
+     * @throws DHBWTrainingException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
+    public function sendRating()
+    {
+        global $DIC;
+
+        if ($_POST['submitted'] == 'cancel') {
+            $DIC->ctrl()->redirect($this, "index");
+        } else {
+            $recommender = new RecommenderCurl($this->training, $this->response);
+            $recommender->sendRating($_POST['recomander_id'], (int) $_POST['submitted']);
             $this->proceedWithReturnOfRecommender();
         }
     }

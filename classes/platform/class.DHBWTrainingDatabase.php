@@ -16,10 +16,13 @@ use ilDBInterface;
 class DHBWTrainingDatabase
 {
     const ALLOWED_TABLES = [
-        'xdht_config',
-        'rep_robj_xdht_settings',
-        'rep_robj_xdht_partic',
-        'usr_data'
+        "xdht_config",
+        "rep_robj_xdht_settings",
+        "rep_robj_xdht_partic",
+        "usr_data",
+        "qpl_a_sc",
+        "qpl_a_mc",
+        "qpl_a_cloze"
     ];
 
     private ilDBInterface $db;
