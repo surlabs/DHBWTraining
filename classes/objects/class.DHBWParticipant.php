@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace objects;
 
 use DateTime;
+use DateTimeImmutable;
 use Exception;
 use ilLPStatus;
 use platform\DHBWTrainingDatabase;
@@ -228,5 +229,30 @@ class DHBWParticipant
 
 
         return $participant;
+    }
+
+    /**
+     * @throws DHBWTrainingException
+     * @throws Exception
+     */
+    public static function loadParticipantsArrayByTrainingId(int $getId): array
+    {
+        $participants = [];
+
+        $database = new DHBWTrainingDatabase();
+
+        $result = $database->select("rep_robj_xdht_partic", ["training_obj_id" => $getId], ["full_name", "created", "last_access", "login"], null, ['LEFT', 'usr_data', 'usr_id', 'usr_id']);
+
+        foreach ($result as $row) {
+            $participants[] = [
+                'name' => $row['full_name'],
+                'username' => $row['login'],
+                'learning_progress' => '100%',
+                'first_access' => new DateTimeImmutable($row['created']),
+                'last_access' => new DateTimeImmutable($row['last_access'])
+            ];
+        }
+
+        return $participants;
     }
 }

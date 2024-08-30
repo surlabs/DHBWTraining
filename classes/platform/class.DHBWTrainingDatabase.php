@@ -156,6 +156,7 @@ class DHBWTrainingDatabase
      * @param array|null $where
      * @param array|null $columns
      * @param string|null $extra
+     * @param array|null $join
      * @return array
      * @throws DHBWTrainingException
      */

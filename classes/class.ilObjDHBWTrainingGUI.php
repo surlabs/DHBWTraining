@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
+use objects\DHBWParticipant;
 use platform\DHBWTrainingException;
 use ui\DHBWExportsTable;
 use ui\DHBWParticipantsTable;
@@ -95,11 +96,20 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $this->ctrl->redirectByClass(DHBWMainGUI::class);
     }
 
+    /**
+     * @throws DHBWTrainingException
+     */
     private function participants()
     {
         $this->tabs->activateTab("participants");
 
         $data_factory = new \ILIAS\Data\Factory();
+
+        $participants_data = new DHBWParticipantsTable();
+
+        $participants_data->setRecords(DHBWParticipant::loadParticipantsArrayByTrainingId($this->object->getId()));
+
+        $date_format = $data_factory->dateFormat()->custom()->weekday()->comma()->space()->day()->dot()->month()->dot()->year()->space()->hours24()->colon()->minutes()->colon()->seconds()->get();
 
         $table = $this->factory->table()->data(
             '',
@@ -107,10 +117,10 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
                 'name' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_name"))->withIsSortable(true),
                 'username' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_usr_name"))->withIsSortable(true),
                 'learning_progress' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_learning_progress"))->withIsSortable(true),
-                'first_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_first_access"), $data_factory->dateFormat()->standard())->withIsSortable(true),
-                'last_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_last_access"), $data_factory->dateFormat()->standard())->withIsSortable(true),
+                'first_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_first_access"), $date_format)->withIsSortable(true),
+                'last_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_last_access"), $date_format)->withIsSortable(true),
             ],
-            new DHBWParticipantsTable()
+            $participants_data
         );
 
         $this->tpl->addCss($this->plugin->getDirectory() . "/templates/css/fix_table_width.css");
@@ -275,12 +285,15 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
 
         $data_factory = new \ILIAS\Data\Factory();
 
+        $date_format = $data_factory->dateFormat()->custom()->weekday()->comma()->space()->day()->dot()->month()->dot()->year()->space()->hours24()->colon()->minutes()->colon()->seconds()->get();
+
+
         $table = $this->factory->table()->data(
             '',
             [
                 'file' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_file"))->withIsSortable(true),
                 'size' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_size"))->withIsSortable(true),
-                'date' => $this->factory->table()->column()->date($this->plugin->txt("exports_table_date"), $data_factory->dateFormat()->standard())->withIsSortable(true),
+                'date' => $this->factory->table()->column()->date($this->plugin->txt("exports_table_date"), $date_format)->withIsSortable(true),
                 'actions' => $this->factory->table()->column()->link($this->plugin->txt("exports_table_actions"))->withIsSortable(false)
             ],
             new DHBWExportsTable()

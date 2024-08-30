@@ -19,6 +19,8 @@ use ILIAS\UI\Component\Table\DataRowBuilder;
  */
 class DHBWParticipantsTable implements DataRetrieval
 {
+    private array $records = [];
+
     public function getRows(DataRowBuilder $row_builder, array $visible_column_ids, Range $range, Order $order, ?array $filter_data, ?array $additional_parameters): Generator
     {
         foreach ($this->doSelect($order, $range) as $record) {
@@ -45,14 +47,11 @@ class DHBWParticipantsTable implements DataRetrieval
 
     private function getRecords(): array
     {
-        return [
-            [
-                'name' => 'Esto es un registro falso para probar la tabla',
-                'username' => 'sdiaz',
-                'learning_progress' => '100%',
-                'first_access' => new DateTimeImmutable('2021-01-01'),
-                'last_access' => new DateTimeImmutable('2021-01-01')
-            ]
-        ];
+        return $this->records;
+    }
+
+    public function setRecords(array $records): void
+    {
+        $this->records = $records;
     }
 }
