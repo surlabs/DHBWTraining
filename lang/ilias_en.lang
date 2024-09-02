@@ -13,7 +13,6 @@ config_msg_success#:#Config saved successfully!
 object_start#:#Start
 object_participants#:#Participants
 object_settings#:#Settings
-object_export#:#Export
 
 object_start_training#:#Start training
 
@@ -43,12 +42,6 @@ participants_table_last_access#:#Last access
 status_not_attempted#:#Not attempted
 status_in_progress#:#In progress
 status_completed#:#Completed
-
-object_export_generate#:#Create Export File (Create Test Export File)
-exports_table_file#:#File
-exports_table_size#:#Size
-exports_table_date#:#Date
-exports_table_actions#:#Actions
 
 error_recommender_system_no_status#:#An error has occurred - No status
 error_no_question_id#:#An error occurred - Question was not found. Question ID: %s

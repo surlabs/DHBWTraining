@@ -8,7 +8,6 @@ use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
 use objects\DHBWParticipant;
 use platform\DHBWTrainingException;
-use ui\DHBWExportsTable;
 use ui\DHBWParticipantsTable;
 
 /**
@@ -77,7 +76,6 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         if ($this->checkPermissionBool("write")) {
             $this->tabs->addTab("participants", $this->plugin->txt("object_participants"), $this->ctrl->getLinkTarget($this, "participants"));
             $this->tabs->addTab("settings", $this->plugin->txt("object_settings"), $this->ctrl->getLinkTarget($this, "settings"));
-            $this->tabs->addTab("export", $this->plugin->txt("object_export"), $this->ctrl->getLinkTarget($this, "export"));
         }
 
         if ($this->checkPermissionBool("edit_permission")) {
@@ -270,49 +268,5 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $this->object->update();
 
         return $renderer->render($DIC->ui()->factory()->messageBox()->success($this->plugin->txt('object_settings_msg_success')));
-    }
-
-    private function export()
-    {
-        global $DIC;
-        $this->tabs->activateTab("export");
-
-        $generate_export = $this->factory->button()->standard($this->plugin->txt("object_export_generate"), $this->ctrl->getLinkTarget($this, "generateExport"));
-
-        $generate_export->getCanonicalName();
-
-        $DIC->toolbar()->addStickyItem($generate_export);
-
-        $data_factory = new \ILIAS\Data\Factory();
-
-        $date_format = $data_factory->dateFormat()->custom()->weekday()->comma()->space()->day()->dot()->month()->dot()->year()->space()->hours24()->colon()->minutes()->colon()->seconds()->get();
-
-
-        $table = $this->factory->table()->data(
-            '',
-            [
-                'file' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_file"))->withIsSortable(true),
-                'size' => $this->factory->table()->column()->text($this->plugin->txt("exports_table_size"))->withIsSortable(true),
-                'date' => $this->factory->table()->column()->date($this->plugin->txt("exports_table_date"), $date_format)->withIsSortable(true),
-                'actions' => $this->factory->table()->column()->link($this->plugin->txt("exports_table_actions"))->withIsSortable(false)
-            ],
-            new DHBWExportsTable()
-        );
-
-        $this->tpl->addCss($this->plugin->getDirectory() . "/templates/css/fix_table_width.css");
-
-        $this->tpl->setContent($this->renderer->render($table->withRequest($this->request)));
-    }
-
-    private function generateExport()
-    {
-        dump("Generate export"); exit();
-    }
-
-    private function downloadExport()
-    {
-        $file = $this->request->getQueryParams()["file"];
-
-        dump("Download: $file"); exit();
     }
 }
