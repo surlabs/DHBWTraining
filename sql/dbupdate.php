@@ -144,6 +144,7 @@ if (!$db->tableExists('rep_robj_xdht_partic')) {
 
     $db->createTable('rep_robj_xdht_partic', $fields);
     $db->addPrimaryKey('rep_robj_xdht_partic', ['id']);
+    $db->createSequence('rep_robj_xdht_partic');
 }
 
 $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 120]);
