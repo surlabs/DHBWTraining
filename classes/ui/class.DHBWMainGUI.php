@@ -392,8 +392,6 @@ class DHBWMainGUI
         $q_gui = assQuestionGUI::_getQuestionGUI("", (int) $question['question_id']);
 
         if(is_object($q_gui )) {
-            assQuestion::_includeClass($q_gui->getQuestionType(), 1);
-
             $question_type_gui = $q_gui->getQuestionType() . 'GUI';
 
             $ass_question = new $question_type_gui($question['question_id']);
