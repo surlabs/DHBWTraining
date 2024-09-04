@@ -1,0 +1,58 @@
+obj_xdht#:#Entrenamiento
+xdht_new#:#Nuevo entrenamiento
+xdht_add#:#Agregar entrenamiento
+objs_xdht_duplicate#:#Copiar entrenamiento
+objs_xdht#:#Entrenamientos
+
+config_learning_progress#:#Progreso de aprendizaje
+config_learning_progress_info#:#Progreso de aprendizaje
+config_salt#:#Sal
+config_salt_info#:#Sal
+config_msg_success#:#¡Configuración guardada con éxito!
+
+object_start#:#Iniciar
+object_participants#:#Participantes
+object_settings#:#Configuraciones
+
+object_start_training#:#Iniciar entrenamiento
+
+object_settings_basic#:#Configuraciones básicas
+object_settings_title#:#Título
+object_settings_description#:#Descripción
+object_settings_online#:#En línea
+object_settings_online_info#:#Si está en línea, los participantes pueden realizar el ejercicio asistido
+object_settings_recommender_system#:#Sistema de recomendaciones
+object_settings_installation_key#:#Clave de instalación
+object_settings_secret#:#Secreto
+object_settings_server#:#Servidor
+object_settings_external_server#:#Servidor externo
+object_settings_built_in_server#:#Servidor integrado
+object_settings_built_in_server_info#:#Debe establecer [[question_id]] en la descripción de algunas preguntas.<br>En estas preguntas, se selecciona una al azar para recommender_id.<br>Consulte en Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 para ajustar el servidor de depuración
+object_settings_url#:#URL
+object_settings_log#:#Registro
+object_settings_learning_progress#:#Progreso de aprendizaje
+object_settings_learning_progress_info#:#Si esta opción está habilitada, el progreso de aprendizaje se activará incluso si está deshabilitado en la configuración global
+object_settings_msg_success#:#¡Configuraciones guardadas con éxito!
+
+participants_table_name#:#Nombre
+participants_table_usr_name#:#Nombre de usuario
+participants_table_learning_progress#:#Progreso de aprendizaje
+participants_table_first_access#:#Primer acceso
+participants_table_last_access#:#Último acceso
+status_not_attempted#:#No intentado
+status_in_progress#:#En progreso
+status_completed#:#Completado
+
+error_recommender_system_no_status#:#Ha ocurrido un error - Sin estado
+error_no_question_id#:#Ha ocurrido un error - Pregunta no encontrada. ID de la pregunta: %s
+error_recommender_system#:#El sistema de recomendaciones ha emitido un error: %s
+error_recommender_system_not_reached#:#No se pudo contactar con el sistema de recomendaciones
+error_no_question_found#:#No se encontró ninguna pregunta, inténtalo de nuevo
+
+submit_answer#:#Enviar respuesta
+interrupt#:#Interrumpir
+how_difficulty#:#¿Qué tan difícil encontraste esta tarea?
+level1#:#Muy fácil
+level2#:#Bastante fácil
+level3#:#Bastante difícil
+level4#:#Demasiado difícil

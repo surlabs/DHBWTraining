@@ -1,0 +1,58 @@
+obj_xdht#:#Schulung
+xdht_new#:#Neue Schulung
+xdht_add#:#Schulung hinzufügen
+objs_xdht_duplicate#:#Schulung kopieren
+objs_xdht#:#Schulungen
+
+config_learning_progress#:#Lernfortschritt
+config_learning_progress_info#:#Lernfortschritt
+config_salt#:#Salt
+config_salt_info#:#Salt
+config_msg_success#:#Konfiguration erfolgreich gespeichert!
+
+object_start#:#Start
+object_participants#:#Teilnehmer
+object_settings#:#Einstellungen
+
+object_start_training#:#Schulung starten
+
+object_settings_basic#:#Grundeinstellungen
+object_settings_title#:#Titel
+object_settings_description#:#Beschreibung
+object_settings_online#:#Online
+object_settings_online_info#:#Wenn online, können Teilnehmer die unterstützte Übung durchführen
+object_settings_recommender_system#:#Empfehlungssystem
+object_settings_installation_key#:#Installationsschlüssel
+object_settings_secret#:#Geheimnis
+object_settings_server#:#Server
+object_settings_external_server#:#Externer Server
+object_settings_built_in_server#:#Eingebauter Server
+object_settings_built_in_server_info#:#Sie müssen [[question_id]] in die Beschreibung einiger Fragen einfügen.<br>In diesen Fragen wird eine zufällig für recommender_id ausgewählt.<br>Siehe unter Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1, um den Debug-Server anzupassen
+object_settings_url#:#URL
+object_settings_log#:#Protokoll
+object_settings_learning_progress#:#Lernfortschritt
+object_settings_learning_progress_info#:#Wenn diese Option aktiviert ist, wird der Lernfortschritt aktiviert, auch wenn der Lernfortschritt in den globalen Einstellungen deaktiviert ist
+object_settings_msg_success#:#Einstellungen erfolgreich gespeichert!
+
+participants_table_name#:#Name
+participants_table_usr_name#:#Benutzername
+participants_table_learning_progress#:#Lernfortschritt
+participants_table_first_access#:#Erster Zugriff
+participants_table_last_access#:#Letzter Zugriff
+status_not_attempted#:#Nicht versucht
+status_in_progress#:#In Bearbeitung
+status_completed#:#Abgeschlossen
+
+error_recommender_system_no_status#:#Ein Fehler ist aufgetreten - Kein Status
+error_no_question_id#:#Ein Fehler ist aufgetreten - Frage nicht gefunden. Frage ID: %s
+error_recommender_system#:#Das Empfehlungssystem hat einen Fehler gemeldet: %s
+error_recommender_system_not_reached#:#Das Empfehlungssystem konnte nicht erreicht werden
+error_no_question_found#:#Keine Frage gefunden, bitte erneut versuchen
+
+submit_answer#:#Antwort absenden
+interrupt#:#Unterbrechen
+how_difficulty#:#Wie fanden Sie diese Aufgabe?
+level1#:#Sehr einfach
+level2#:#Eher einfach
+level3#:#Eher schwer
+level4#:#Zu schwer
