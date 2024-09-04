@@ -95,7 +95,7 @@ class DHBWQuestionAnswer {
             case 'assMultipleChoice':
                 $table = "qpl_a_mc";
                 break;
-            case 'assClozeText':
+            case 'assClozeTest':
                 $table = "qpl_a_cloze";
                 break;
         }

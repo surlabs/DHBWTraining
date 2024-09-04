@@ -320,10 +320,14 @@ class DHBWMainGUI
 
             switch ($question['type_tag']) {
                 case 'assSingleChoice':
-                    $question_answer = $question_answers[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
+                    if (isset($_POST['question_id']) && isset($_POST['single_choice_result' . $_POST['question_id'] . 'ID'])) {
+                        $question_answer = $question_answers[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
 
-                    if (is_object($question_answer)) {
-                        $answertext = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
+                        if (is_object($question_answer)) {
+                            $answertext = ["answertext" => base64_encode("Choice " . $question_answer->getAOrder()), "points" => $question_answer->getPoints()];
+                        } else {
+                            $answertext = ["answertext" => "", "points" => 0];
+                        }
                     } else {
                         $answertext = ["answertext" => "", "points" => 0];
                     }
