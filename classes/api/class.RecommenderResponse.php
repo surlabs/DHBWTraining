@@ -412,9 +412,8 @@ class RecommenderResponse
             $set = $ilDB->query($sql);
 
             $row = $ilDB->fetchAssoc($set);
-            $feedback = $row["feedback"];
-            if (!empty($feedback)) {
-                return $feedback;
+            if (!empty($row["feedback"])) {
+                return $row["feedback"];
             }
 
             $cdb = (int)$this->correct;
@@ -422,9 +421,8 @@ class RecommenderResponse
             $set = $ilDB->query($sql);
 
             $row = $ilDB->fetchAssoc($set);
-            $feedback = $row["feedback"];
-            if (!empty($feedback)) {
-                return $feedback;
+            if (!empty($row["feedback"])) {
+                return $row["feedback"];
             }
         }
 
