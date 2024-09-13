@@ -198,3 +198,12 @@ if ($db->tableExists('rep_robj_xdht_settings')) {
     }
 }
 ?>
+<#11>
+<?php
+global $DIC;
+$db = $DIC->database();
+
+if ($db->tableExists('rep_robj_xdht_partic')) {
+    $db->modifyTableColumn('rep_robj_xdht_partic', 'full_name', ['length' => 255]);
+}
+?>
