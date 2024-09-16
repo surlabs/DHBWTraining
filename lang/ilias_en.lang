@@ -11,6 +11,7 @@ config_salt_info#:#Salt
 config_msg_success#:#Config saved successfully!
 
 object_start#:#Start
+object_edit_page#:#Edit page
 object_participants#:#Participants
 object_settings#:#Settings
 

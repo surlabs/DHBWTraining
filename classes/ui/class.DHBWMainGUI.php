@@ -18,6 +18,7 @@ use platform\DHBWTrainingException;
  * Class DHBWMainGUI
  *
  * @ilCtrl_Calls      DHBWMainGUI: ilAssQuestionPageGUI
+ * @ilCtrl_Calls      DHBWMainGUI: ilPageObjectGUI
  * @authors Jesús Copado, Daniel Cazalla, Saúl Díaz, Juan Aguilar <info@surlabs.es>
  */
 class DHBWMainGUI
@@ -50,11 +51,23 @@ class DHBWMainGUI
         $this->{$cmd}();
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     public function executeCommand()
     {
         global $DIC;
 
-        $this->performCommand($DIC->ctrl()->getCmd("index"));
+        $nextClass = $DIC->ctrl()->getNextClass();
+
+        switch ($nextClass) {
+            case strtolower(DHBWPageObjectGUI::class):
+                $DIC->ctrl()->forwardCommand(new DHBWPageObjectGUI($this->training));
+                break;
+            default:
+                $this->performCommand($DIC->ctrl()->getCmd("index"));
+                break;
+        }
     }
 
     /**
@@ -64,15 +77,18 @@ class DHBWMainGUI
     {
         global $DIC;
 
-        $start_button = $this->factory->button()->standard($this->plugin->txt("object_start_training"), $this->ctrl->getLinkTarget($this, "start"));
+        $start_button = $this->factory->button()->primary($this->plugin->txt("object_start_training"), $this->ctrl->getLinkTarget($this, "start"));
+        $edit_button = $this->factory->button()->standard($this->plugin->txt("object_edit_page"), $this->ctrl->getLinkTargetByClass(DHBWPageObjectGUI::class, "edit"));
 
         $DIC->toolbar()->addStickyItem($start_button);
+        $DIC->toolbar()->addStickyItem($edit_button);
     }
 
     /**
      * @throws DHBWTrainingException
      * @throws ilCtrlException
      * @throws ilTemplateException
+     * @throws ilSystemStyleException
      */
     private function start()
     {
