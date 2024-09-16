@@ -11,6 +11,7 @@ config_salt_info#:#Sal
 config_msg_success#:#¡Configuración guardada con éxito!
 
 object_start#:#Iniciar
+object_edit_page#:#Editar página
 object_participants#:#Participantes
 object_settings#:#Configuraciones
 
