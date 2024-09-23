@@ -26,7 +26,7 @@ class DHBWParticipantsTable implements DataRetrieval
         foreach ($this->doSelect($order, $range) as $record) {
             $row_id = $record['username'];
 
-            yield $row_builder->buildDataRow($row_id, $record);
+            yield $row_builder->buildDataRow((string) $row_id, $record);
         }
     }
 
