@@ -336,7 +336,7 @@ class DHBWMainGUI
 
             switch ($question['type_tag']) {
                 case 'assSingleChoice':
-                    if (isset($_POST['question_id']) && isset($_POST['single_choice_result' . $_POST['question_id'] . 'ID'])) {
+                    if (isset($_POST['question_id']) && isset($_POST['multiple_choice_result' . $_POST['question_id'] . 'ID'])) {
                         $question_answer = $question_answers[$_POST['multiple_choice_result' . $_POST['question_id'] . 'ID']];
 
                         if (is_object($question_answer)) {
