@@ -362,29 +362,26 @@ class DHBWMainGUI
                     }
                     break;
                 case 'assClozeTest':
-                    foreach ($_POST as $key => $value) {
+                    for ($i = 0; $i < 10; $i++) {
 
-                        if (strpos($key, 'gap_') !== false) {
+                        if (isset($_POST['gap_' . $i])) {
+                            $value = str_replace(array(' ', ','), array('', '.'), $_POST['gap_' . $i]);
                             $question_answer = $question_answers;
-
-                            $value = str_replace(array(' ', ','), array('', '.'), $value);
-                            $arr_splitted_gap = explode('gap_', $key);
-
-                            if (in_array($question_answer[$arr_splitted_gap[1]]['cloze_type'], [0, 2])) {
-                                $answertext[] = ["gap_id" => $arr_splitted_gap[1], 'cloze_type' => 2, 'answertext' => base64_encode($value),
-                                    'points' => ($question_answer[$arr_splitted_gap[1]][0]->getAnswertext() == $value) * $question_answer[$arr_splitted_gap[1]][0]->getPoints()];
+                            if (in_array($question_answer[$i]['cloze_type'], [0, 2])) {
+                                $answertext[] = ["gap_id" => $i, 'cloze_type' => 2, 'answertext' => base64_encode($value),
+                                    'points' => ($question_answer[$i][0]->getAnswertext() == $value) * $question_answer[$i][0]->getPoints()];
                             } else {
-                                if (is_object($question_answer[$arr_splitted_gap[1]][$value])) {
+                                if (is_object($question_answer[$i][$value])) {
                                     $answertext[] = [
-                                        "gap_id"     => $arr_splitted_gap[1],
-                                        'cloze_type' => $question_answer[$arr_splitted_gap[1]]['cloze_type'],
-                                        'answertext' => base64_encode($question_answer[$arr_splitted_gap[1]][$value]->getAnswertext()),
-                                        'points' => $question_answer[$arr_splitted_gap[1]][$value]->getPoints()
+                                        "gap_id" => $i,
+                                        'cloze_type' => $question_answer[$i]['cloze_type'],
+                                        'answertext' => base64_encode($question_answer[$i][$value]->getAnswertext()),
+                                        'points' => $question_answer[$i][$value]->getPoints()
                                     ];
                                 } else {
                                     $answertext[] = [
-                                        "gap_id"     => $arr_splitted_gap[1],
-                                        'cloze_type' => $question_answer[$arr_splitted_gap[1]]['cloze_type'],
+                                        "gap_id" => $i,
+                                        'cloze_type' => $question_answer[$i]['cloze_type'],
                                         'answertext' => "",
                                         'points' => 0
                                     ];
