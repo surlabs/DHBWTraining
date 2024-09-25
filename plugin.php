@@ -5,7 +5,7 @@
 
 $id = 'xdht';
 
-$version = '8.0.3';
+$version = '8.0.4';
 
 $ilias_min_version = '8.0';
 $ilias_max_version = '8.999';
