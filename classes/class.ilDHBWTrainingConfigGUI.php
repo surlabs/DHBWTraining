@@ -69,7 +69,7 @@ class ilDHBWTrainingConfigGUI extends ilPluginConfigGUI
         $salt = $this->factory->input()->field()->text(
             $this->plugin_object->txt('config_salt'),
             $this->plugin_object->txt('config_salt_info')
-        )->withValue(DHBWTrainingConfig::get("salt"))->withAdditionalTransformation($this->refinery->custom()->transformation(
+        )->withValue((string)DHBWTrainingConfig::get("salt"))->withAdditionalTransformation($this->refinery->custom()->transformation(
             function ($v) {
                 DHBWTrainingConfig::set('salt', $v);
             }
