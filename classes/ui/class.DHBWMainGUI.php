@@ -413,7 +413,7 @@ class DHBWMainGUI
 
             $question_type_gui = $q_gui->getQuestionType() . 'GUI';
 
-            $ass_question = new $question_type_gui($question['question_id']);
+            $ass_question = new $question_type_gui( (int) $question['question_id']);
 
             return $ass_question->object->persistPreviewState($previewSession);
         }
