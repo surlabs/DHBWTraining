@@ -61,6 +61,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
             return;
         }
 
+        $this->setTitleAndDescription();
         $this->{$cmd}();
     }
 
