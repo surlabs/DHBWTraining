@@ -60,4 +60,21 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
 
         return $props;
     }
+
+    public function getAlertProperties(): array
+    {
+        if (!isset($this->obj_id)) {
+            return [];
+        }
+        $props = parent::getAlertProperties();
+        if (ilObjDHBWTrainingAccess::_isOffline($this->obj_id)) {
+            $props[] = array(
+                'alert' => true,
+                'newline' => true,
+                'property' => 'Status',
+                'value' => 'Offline'
+            );
+        }
+        return $props;
+    }
 }
