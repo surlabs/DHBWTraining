@@ -50,6 +50,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
     public function performCommand(string $cmd): void
     {
         global $DIC;
+        $this->checkPermission("read");
 
         $next_class = $DIC->ctrl()->getNextClass($this);
 
@@ -132,6 +133,8 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
      */
     private function settings(): void
     {
+        $this->checkPermission("write");
+
         $this->tabs->activateTab("settings");
 
         $form_action = $this->ctrl->getLinkTarget($this, "settings");
