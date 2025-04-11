@@ -78,10 +78,12 @@ class DHBWMainGUI
         global $DIC;
 
         $start_button = $this->factory->button()->primary($this->plugin->txt("object_start_training"), $this->ctrl->getLinkTarget($this, "start"));
-        $edit_button = $this->factory->button()->standard($this->plugin->txt("object_edit_page"), $this->ctrl->getLinkTargetByClass(DHBWPageObjectGUI::class, "edit"));
-
         $DIC->toolbar()->addStickyItem($start_button);
-        $DIC->toolbar()->addStickyItem($edit_button);
+
+        if (ilObjDHBWTrainingAccess::hasWriteAccess()) {
+            $edit_button = $this->factory->button()->standard($this->plugin->txt("object_edit_page"), $this->ctrl->getLinkTargetByClass(DHBWPageObjectGUI::class, "edit"));
+            $DIC->toolbar()->addStickyItem($edit_button);
+        }
     }
 
     /**
