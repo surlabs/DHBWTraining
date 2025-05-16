@@ -91,4 +91,12 @@ class DHBWPageObjectGUI extends ilPageObjectGUI
 
         return $html;
     }
+
+    /**
+     * @throws ilCtrlException
+     */
+    public function finishEditing(): void
+    {
+        $this->ctrl->redirectByClass(DHBWMainGUI::class, "index");
+    }
 }

@@ -84,6 +84,10 @@ class DHBWMainGUI
             $edit_button = $this->factory->button()->standard($this->plugin->txt("object_edit_page"), $this->ctrl->getLinkTargetByClass(DHBWPageObjectGUI::class, "edit"));
             $DIC->toolbar()->addStickyItem($edit_button);
         }
+
+        $page = new DHBWPageObjectGUI($this->training);
+
+        $DIC->ui()->mainTemplate()->setContent($page->getHTML());
     }
 
     /**
