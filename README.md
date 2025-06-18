@@ -1,9 +1,5 @@
-<div alt style="text-align: center; transform: scale(.5);">
-	<picture>
-		<source media="(prefers-color-scheme: dark)" srcset="https://github.com/surlabs/DHBWTraining/blob/ilias8/templates/images/GitBannerDHBWTraining.png" />
-		<img alt="DHBWTraining" src="https://github.com/surlabs/DHBWTraining/blob/ilias8/templates/images/GitBannerDHBWTraining.png" />
-	</picture>
-</div>
+![DHBWTraining](https://github.com/user-attachments/assets/bddef559-a84d-4516-95cc-888e464793ef)
+
 
 # DHBWTraining Repository Object Plugin for ILIAS 8
 It is compatible with the previous DHBWTraining plugin for ILIAS < 8.0 information and objects.
