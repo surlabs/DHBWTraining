@@ -28,7 +28,7 @@ object_settings_secret#:#Secreto
 object_settings_server#:#Servidor
 object_settings_external_server#:#Servidor externo
 object_settings_built_in_server#:#Servidor integrado
-object_settings_built_in_server_info#:#Debe establecer [[question_id]] en la descripción de algunas preguntas.<br>En estas preguntas, se selecciona una al azar para recommender_id.<br>Consulte en Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 para ajustar el servidor de depuración
+object_settings_built_in_server_info#:#Debe establecer [[question_id]] en la descripción de algunas preguntas.<br>En estas preguntas, se selecciona una al azar para recommender_id.<br>Consulte en public/Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1 para ajustar el servidor de depuración
 object_settings_url#:#URL
 object_settings_log#:#Registro
 object_settings_learning_progress#:#Progreso de aprendizaje

@@ -303,7 +303,7 @@ class DHBWMainGUI
     {
         global $DIC;
 
-        $tpl = new ilTemplate('tpl.questions_form.html', true, true, 'Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining');
+        $tpl = new ilTemplate('tpl.questions_form.html', true, true, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining');
         $tpl->setVariable("ACTION", $DIC->ctrl()->getLinkTarget($this, "proceed"));
         $tpl->setVariable('CANCEL_BTN_VALUE', 'cancel');
         $tpl->setVariable('CANCEL_BTN_TEXT', $this->plugin->txt('interrupt'));

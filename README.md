@@ -9,13 +9,13 @@
 It is compatible with the previous DHBWTraining plugin for ILIAS < 9.0 information and objects.
 
 ## Installation & Update
-1. **Ensure you delete any previous DHBWTraining folder** in Customizing/global/plugins/Services/Repository/RepositoryObject/
+1. **Ensure you delete any previous DHBWTraining folder** in public/Customizing/global/plugins/Services/Repository/RepositoryObject/
 
-2. Create subdirectories, if necessary for Customizing/global/plugins/Services/Repository/RepositoryObject/ or run the following script from the ILIAS root
+2. Create subdirectories, if necessary for public/Customizing/global/plugins/Services/Repository/RepositoryObject/ or run the following script from the ILIAS root
 
 ```bash
-mkdir -p Customizing/global/plugins/Services/Repository/RepositoryObject
-cd Customizing/global/plugins/Services/Repository/RepositoryObject
+mkdir -p public/Customizing/global/plugins/Services/Repository/RepositoryObject
+cd public/Customizing/global/plugins/Services/Repository/RepositoryObject
 ```
 
 3. Then, execute:

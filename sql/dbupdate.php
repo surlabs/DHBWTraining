@@ -147,7 +147,7 @@ if (!$db->tableExists('rep_robj_xdht_partic')) {
     $db->createSequence('rep_robj_xdht_partic');
 }
 
-$db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 120]);
+$db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 250]);
 ?>
 <#2>
 <?php

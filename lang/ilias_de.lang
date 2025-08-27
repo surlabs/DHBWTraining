@@ -28,7 +28,7 @@ object_settings_secret#:#Geheimnis
 object_settings_server#:#Server
 object_settings_external_server#:#Externer Server
 object_settings_built_in_server#:#Eingebauter Server
-object_settings_built_in_server_info#:#Sie müssen [[question_id]] in die Beschreibung einiger Fragen einfügen.<br>In diesen Fragen wird eine zufällig für recommender_id ausgewählt.<br>Siehe unter Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1, um den Debug-Server anzupassen
+object_settings_built_in_server_info#:#Sie müssen [[question_id]] in die Beschreibung einiger Fragen einfügen.<br>In diesen Fragen wird eine zufällig für recommender_id ausgewählt.<br>Siehe unter public/Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining/classes/Recommender/debug/api/v1, um den Debug-Server anzupassen
 object_settings_url#:#URL
 object_settings_log#:#Protokoll
 object_settings_learning_progress#:#Lernfortschritt
