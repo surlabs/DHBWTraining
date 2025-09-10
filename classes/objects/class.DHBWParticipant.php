@@ -9,6 +9,7 @@ namespace objects;
 use DateTime;
 use DateTimeImmutable;
 use Exception;
+use ilDHBWTrainingPlugin;
 use ilLPStatus;
 use platform\DHBWTrainingDatabase;
 use platform\DHBWTrainingException;
@@ -241,18 +242,36 @@ class DHBWParticipant
 
         $database = new DHBWTrainingDatabase();
 
-        $result = $database->select("rep_robj_xdht_partic", ["training_obj_id" => $getId], ["full_name", "created", "last_access", "login"], null, ['LEFT', 'usr_data', 'usr_id', 'usr_id']);
+        $result = $database->select("rep_robj_xdht_partic", ["training_obj_id" => $getId], ["full_name", "created", "last_access", "login", "status"], null, ['LEFT', 'usr_data', 'usr_id', 'usr_id']);
 
         foreach ($result as $row) {
             $participants[] = [
                 'name' => $row['full_name'],
                 'username' => $row['login'],
-                'learning_progress' => '100%',
+                'learning_progress' => self::LPStatusToRepresentation((int) $row['status']),
                 'first_access' => new DateTimeImmutable($row['created']),
                 'last_access' => new DateTimeImmutable($row['last_access'])
             ];
         }
 
         return $participants;
+    }
+
+    public static function LPStatusToRepresentation($status)
+    {
+
+        $pl = ilDHBWTrainingPlugin::getInstance();
+
+        if ($status == ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM) {
+            return $pl->txt("status_not_attempted");
+        }
+        if ($status == ilLPStatus::LP_STATUS_IN_PROGRESS_NUM) {
+            return $pl->txt("status_in_progress");
+        }
+        if ($status == ilLPStatus::LP_STATUS_COMPLETED_NUM) {
+            return $pl->txt("status_completed");
+        }
+
+        return '';
     }
 }
