@@ -121,8 +121,6 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
             $participants_data
         );
 
-        $this->tpl->addCss($this->plugin->getDirectory() . "/templates/css/fix_table_width.css");
-
         $this->tpl->setContent($this->renderer->render($table->withRequest($this->request)));
     }
 
