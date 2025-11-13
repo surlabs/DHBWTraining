@@ -230,8 +230,8 @@ class DHBWMainGUI
         $q_gui->setPreviewSession($previewSession);
 
         $tpl->setCurrentBlock('question');
-        $tpl->setVariable('TITLE', $q_gui->object->getTitle());
-        $tpl->setVariable('QUESTION', $q_gui->getPreview());
+        $tpl->setVariable('TITLE', $q_gui->getObject()->getTitle());
+        $tpl->setVariable('QUESTION', $q_gui->getPreview(true));
 
         $tpl->parseCurrentBlock();
 
@@ -281,8 +281,8 @@ class DHBWMainGUI
 
         $q_gui->setPreviousSolutionPrefilled(true);
         $tpl->setCurrentBlock('question');
-        $tpl->setVariable('TITLE', $q_gui->object->getTitle());
-        $tpl->setVariable('QUESTION', $q_gui->getPreview());
+        $tpl->setVariable('TITLE', $q_gui->getObject()->getTitle());
+        $tpl->setVariable('QUESTION', $q_gui->getPreview(true));
         $tpl->parseCurrentBlock();
         $tpl->setVariable('CANCEL_BTN_VALUE', 'cancel');
         $tpl->setVariable('CANCEL_BTN_TEXT', $this->plugin->txt('interrupt'));
@@ -419,7 +419,7 @@ class DHBWMainGUI
 
             $ass_question = new $question_type_gui( (int) $question['question_id']);
 
-            return $ass_question->object->persistPreviewState($previewSession);
+            return $ass_question->getObject()->persistPreviewState($previewSession);
         }
 
         return false;

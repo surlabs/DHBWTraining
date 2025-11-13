@@ -43,4 +43,8 @@ class ilDHBWTrainingPlugin extends ilRepositoryObjectPlugin
         // TODO: Implement uninstallCustom() method.
     }
 
+    public static function _getIcon(string $a_type): string
+    {
+        return "/Customizing/global/plugins/Services/Repository/RepositoryObject/DHBWTraining/templates/images/icon_xdht.svg";
+    }
 }
