@@ -77,4 +77,13 @@ class ilObjDHBWTrainingListGUI extends ilObjectPluginListGUI
         }
         return $props;
     }
+
+    public function getTypeIcon(): string
+    {
+        return str_replace(
+            ILIAS_ABSOLUTE_PATH . "/public/",
+            "",
+            realpath(parent::getTypeIcon())
+        );
+    }
 }
