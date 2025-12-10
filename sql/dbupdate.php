@@ -146,8 +146,6 @@ if (!$db->tableExists('rep_robj_xdht_partic')) {
     $db->addPrimaryKey('rep_robj_xdht_partic', ['id']);
     $db->createSequence('rep_robj_xdht_partic');
 }
-
-$db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 250]);
 ?>
 <#2>
 <?php
@@ -205,5 +203,14 @@ $db = $DIC->database();
 
 if ($db->tableExists('rep_robj_xdht_partic')) {
     $db->modifyTableColumn('rep_robj_xdht_partic', 'full_name', ['length' => 255]);
+}
+?>
+<#12>
+<?php
+global $DIC;
+$db = $DIC->database();
+
+if ($db->tableExists('rep_robj_xdht_partic')) {
+    $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 250]);
 }
 ?>
