@@ -210,7 +210,7 @@ if ($db->tableExists('rep_robj_xdht_partic')) {
 global $DIC;
 $db = $DIC->database();
 
-if ($db->tableExists('rep_robj_xdht_partic')) {
+if ($db->tableExists('copg_pobj_def')) {
     $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 250]);
 }
 ?>
