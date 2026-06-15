@@ -134,7 +134,7 @@ class DHBWMainGUI
                 $set = $ilDB->query($sql);
                 $row = $ilDB->fetchAssoc($set);
 
-                ilPersonalSkill::addPersonalSkill($ilUser->getId(), $competence_id);
+                $DIC->skills()->personal()->addPersonalSkill($ilUser->getId(), (int) $competence_id);
                 ilBasicSkill::writeUserSkillLevelStatus(
                     $row['id'],
                     $ilUser->getId(),
