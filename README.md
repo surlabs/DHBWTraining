@@ -18,7 +18,7 @@ cd public/Customizing/global/plugins/Services/Repository/RepositoryObject
 ```bash
 git clone https://github.com/surlabs/DHBWTraining.git ./DHBWTraining
 cd DHBWTraining
-git checkout release_9
+git checkout release_10
 ```
 
 Ensure you run composer install at platform root before you install/update the plugin
