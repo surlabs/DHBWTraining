@@ -214,3 +214,16 @@ if ($db->tableExists('copg_pobj_def')) {
     $db->modifyTableColumn('copg_pobj_def', 'component', ['length' => 250]);
 }
 ?>
+<#13>
+<?php
+global $DIC;
+$db = $DIC->database();
+
+if ($db->tableExists('copg_pobj_def')) {
+    $db->queryF(
+        'UPDATE copg_pobj_def SET directory = %s WHERE parent_type = %s AND directory = %s',
+        [ilDBConstants::T_TEXT, ilDBConstants::T_TEXT, ilDBConstants::T_TEXT],
+        ['classes/ui/PageEditor', ilDhbwTrainingPlugin::PLUGIN_ID, 'classes/Start/PageEditor']
+    );
+}
+?>

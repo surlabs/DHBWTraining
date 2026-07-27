@@ -227,6 +227,7 @@ class DHBWMainGUI
             return $tpl->get();
         }
         $previewSession = new ilAssQuestionPreviewSession($ilUser->getId(), $question['question_id']);
+        $previewSession->init();
         $q_gui->setPreviewSession($previewSession);
 
         $tpl->setCurrentBlock('question');
@@ -303,7 +304,7 @@ class DHBWMainGUI
     {
         global $DIC;
 
-        $tpl = new ilTemplate('tpl.questions_form.html', true, true, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/DhbwTraining');
+        $tpl = new ilTemplate($this->plugin->getDirectory() . '/templates/default/tpl.questions_form.html', true, true);
         $tpl->setVariable("ACTION", $DIC->ctrl()->getLinkTarget($this, "proceed"));
         $tpl->setVariable('CANCEL_BTN_VALUE', 'cancel');
         $tpl->setVariable('CANCEL_BTN_TEXT', $this->plugin->txt('interrupt'));
@@ -335,7 +336,7 @@ class DHBWMainGUI
             if (!$this->setAnsweredForPreviewSession($question)) {
                 $question = RecommenderResponse::getQuestionByRecomander(strval(filter_input(INPUT_POST, 'recomander_id')));
 
-                $DIC->ui->mainTemplate()->setContent($this->initQuestionForm($question));
+                $DIC->ui()->mainTemplate()->setContent($this->initQuestionForm($question));
 
                 return;
             }
@@ -411,6 +412,7 @@ class DHBWMainGUI
         global $ilUser;
 
         $previewSession = new ilAssQuestionPreviewSession($ilUser->getId(), (int) $question['question_id']);
+        $previewSession->init();
 
         $q_gui = assQuestionGUI::_getQuestionGUI("", (int) $question['question_id']);
 

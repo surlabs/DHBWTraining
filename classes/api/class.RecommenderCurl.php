@@ -193,7 +193,7 @@ class RecommenderCurl
                     $progress_bar = unserialize(ilSession::get(self::KEY_RESPONSE_PROGRESS_BAR));
 
                     $this->response->setProgress(floatval($progress_bar['progress']));
-                    $this->response->setProgressType((string)floatval($progress_bar['progress_type']));
+                    $this->response->setProgressType((string) $progress_bar['progress_type']);
                 }
             }
 
@@ -262,7 +262,11 @@ class RecommenderCurl
             $url = rtrim($this->training->getUrl(), "/") . $rest_url;
         } else {
             $url = ILIAS_HTTP_PATH . "/" . $this->plugin->getDirectory() . "/classes/Recommender/debug/" . trim($rest_url, "/") . ".php?obj_id=" . $this->training->getId();
-            $curlConnection->setOpt(CURLOPT_COOKIE, session_name() . '=' . session_id() . ";XDEBUG_SESSION=" . $_COOKIE["XDEBUG_SESSION"]);
+            $cookie = session_name() . '=' . session_id();
+            if (isset($_COOKIE['XDEBUG_SESSION'])) {
+                $cookie .= ';XDEBUG_SESSION=' . $_COOKIE['XDEBUG_SESSION'];
+            }
+            $curlConnection->setOpt(CURLOPT_COOKIE, $cookie);
         }
 
         $curlConnection->setOpt(CURLOPT_URL, $url);

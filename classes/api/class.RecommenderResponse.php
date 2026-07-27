@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace api;
 
 use ilGlobalTemplateInterface;
-use ilProgressBar;
 use objects\DHBWProgressMeter;
 
 /**
@@ -44,7 +43,7 @@ class RecommenderResponse
     private array $send_info = [];
     private array $send_question = [];
     private array $send_failure = [];
-    private bool $correct;
+    private bool $correct = false;
 
     public function getStatus(): string
     {
@@ -327,8 +326,8 @@ class RecommenderResponse
                     (int) $progress_meter->getRequiredScore(),
                     (int) $progress_meter->getSecondaryReachedScore()
                 );
-                $ui_element->withMainText($progress_meter->getPrimaryReachedScoreLabel());
-                $ui_element->withRequiredText($progress_meter->getRequiredScoreLabel());
+                $ui_element = $ui_element->withMainText($progress_meter->getPrimaryReachedScoreLabel());
+                $ui_element = $ui_element->withRequiredText($progress_meter->getRequiredScoreLabel());
                 break;
         }
 
@@ -364,30 +363,14 @@ class RecommenderResponse
             return "";
         }
 
-        $progress_bar = ilProgressBar::getInstance();
+        global $DIC;
 
-        $progress_bar->setCurrent($this->progress * 100);
+        $progress = min(1, max(0, $this->progress ?? 0));
+        $progress_meter = $DIC->ui()->factory()->chart()->progressMeter()
+            ->standard(100, $progress * 100)
+            ->withMainText((string) round($progress * 100) . '%');
 
-        switch ($this->progress_type) {
-            case ilProgressBar::TYPE_SUCCESS:
-                $progress_bar->setType(ilProgressBar::TYPE_SUCCESS);
-                break;
-
-            case ilProgressBar::TYPE_WARNING:
-                $progress_bar->setType(ilProgressBar::TYPE_WARNING);
-                break;
-
-            case ilProgressBar::TYPE_DANGER:
-                $progress_bar->setType(ilProgressBar::TYPE_DANGER);
-                break;
-
-            case ilProgressBar::TYPE_INFO:
-            default:
-                $progress_bar->setType(ilProgressBar::TYPE_INFO);
-                break;
-        }
-
-        return $progress_bar->render();
+        return $DIC->ui()->renderer()->render($progress_meter);
     }
 
     public function getFeedbackType(): string
@@ -426,13 +409,11 @@ class RecommenderResponse
             }
         }
 
-        if (!empty($this->feedback) and !is_numeric($this->feedback)) {
-            return $this->feedback;
-        } elseif ($this->correct) {
+        if ($this->correct) {
             return "<strong>Ihre Antwort ist korrekt!</strong>";
-        } else {
-            return $this->getCorrectAnswer((int) $question_id, (int) $question_type);
         }
+
+        return $this->getCorrectAnswer((int) $question_id, (int) $question_type);
     }
 
     private function getCorrectAnswer(int $question, int $question_type): string

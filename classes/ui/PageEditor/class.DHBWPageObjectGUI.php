@@ -38,7 +38,7 @@ class DHBWPageObjectGUI extends ilPageObjectGUI
             $DIC->database()->insert('copg_pobj_def', [
                 'parent_type' => [ilDBConstants::T_TEXT, ilDhbwTrainingPlugin::PLUGIN_ID],
                 'class_name'  => [ilDBConstants::T_TEXT, DHBWPageObject::class],
-                'directory'   => [ilDBConstants::T_TEXT, 'classes/Start/PageEditor'],
+                'directory'   => [ilDBConstants::T_TEXT, 'classes/ui/PageEditor'],
                 'component'   => [ilDBConstants::T_TEXT, ilDhbwTrainingPlugin::getInstance()->getDirectory()]
             ]);
         }
