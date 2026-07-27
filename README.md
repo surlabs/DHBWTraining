@@ -1,7 +1,7 @@
 ![DHBWTraining](https://github.com/user-attachments/assets/bddef559-a84d-4516-95cc-888e464793ef)
 
-# DHBWTraining Repository Object Plugin for ILIAS 9
-It is compatible with the previous DHBWTraining plugin for ILIAS < 9.0 information and objects.
+# DHBWTraining Repository Object Plugin for ILIAS 11
+It is compatible with information and objects from previous DHBWTraining versions.
 
 ## Installation & Update
 1. **Ensure you delete any previous DHBWTraining folder** in public/Customizing/global/plugins/Services/Repository/RepositoryObject/
@@ -18,7 +18,7 @@ cd public/Customizing/global/plugins/Services/Repository/RepositoryObject
 ```bash
 git clone https://github.com/surlabs/DHBWTraining.git ./DHBWTraining
 cd DHBWTraining
-git checkout release_10
+git checkout dev_11
 ```
 
 Ensure you run composer install at platform root before you install/update the plugin
@@ -29,7 +29,7 @@ npm install
 
 Run ILIAS update script at platform root
 ```bash
-php setup/setup.php update
+php cli/setup.php update
 ```
 
 **Ensure you don't ignore plugins at the ilias .gitignore files and don't use --no-plugins option at ILIAS setup**
@@ -41,6 +41,7 @@ php setup/setup.php update
 
 
 # Version History
+* The version 11.x.x for **ILIAS 11** maintained by SURLABS can be found in the Github branch **dev_11**
 * The version 10.x.x for **ILIAS 10** maintained by SURLABS can be found in the Github branch **release_10**
 * The version 9.x.x for **ILIAS 9** maintained by SURLABS can be found in the Github branch **release_9**
 * The version 8.x.x for **ILIAS 8** maintained by SURLABS can be found in the Github branch **release_8**
