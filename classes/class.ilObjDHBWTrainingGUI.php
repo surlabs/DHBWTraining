@@ -112,6 +112,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
         $date_format = $data_factory->dateFormat()->custom()->weekday()->comma()->space()->day()->dot()->month()->dot()->year()->space()->hours24()->colon()->minutes()->colon()->seconds()->get();
 
         $table = $this->factory->table()->data(
+            $participants_data,
             '',
             [
                 'name' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_name"))->withIsSortable(true),
@@ -119,8 +120,7 @@ class ilObjDHBWTrainingGUI extends ilObjectPluginGUI
                 'learning_progress' => $this->factory->table()->column()->text($this->plugin->txt("participants_table_learning_progress"))->withIsSortable(true),
                 'first_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_first_access"), $date_format)->withIsSortable(true),
                 'last_access' => $this->factory->table()->column()->date($this->plugin->txt("participants_table_last_access"), $date_format)->withIsSortable(true),
-            ],
-            $participants_data
+            ]
         );
 
         $this->tpl->setContent($this->renderer->render($table->withRequest($this->request)));
